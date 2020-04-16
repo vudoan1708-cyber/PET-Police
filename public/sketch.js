@@ -1,21 +1,25 @@
 const MODEL_URL = 'face-api.js-master/weights';
 // const input = document.getElementById('my-face');
 
-
 const video = document.getElementById('video');
 const photo = document.getElementById('photo');
+const webcam_loading = document.getElementById('webcam_loading');
 let predictedAges = [];
 let gender = "";
 let age = 0;
-let riskLevel = 0; // total risk score
+
+let riskLevel = 0; // total risk score (age + expressions + gender)
 let ageScore = 0; // age score
 let exScore = 0; // expression score
+let genderScore = 0; // gender score
 
-let aggressiveness = 0;
+let aggressiveness = 0; // contains angry
 let suspiciousness = 0; // contains fearful + sad
 let passiveness = 0; // contains neutral
 
-let btnShow = false;
+// storing images to database
+let captured = true;
+let image64 = null; // a variable to store images 
 
 // load all the included models
 Promise.all([
@@ -39,6 +43,8 @@ function startVideo() {
 
 video.addEventListener('play', () => {
     // console.log('Playing');
+    webcam_loading.style.visibility = 'hidden'; // get rid of the text when webcam is loaded
+
     const hidden_canvas = document.getElementById('canvas');
     const canvas = faceapi.createCanvasFromMedia(video); // create a canvas 
     const context = canvas.getContext('2d');
@@ -98,28 +104,43 @@ video.addEventListener('play', () => {
                         exScore = (aggressiveness * 2 + suspiciousness * 2 + (100 - passiveness));
                         // console.log(exScore);
                     }
-                    riskLevel = (ageScore + exScore) / 10;
+                    if (genderScore <= 300) {
+                        // console.log(gender);
+                        if (gender === 'male') genderScore = 300;
+                        else genderScore = 150;
+                    }
+                    riskLevel = (ageScore + exScore + genderScore) / 10;
                     // console.log(riskLevel);
                     riskDisplay();
                 }
                 setTimeout(() => { // run the code once
                     // get the exact size of the video element
-                    let width = video.videoWidth,
+                    if (captured) {
+                        let width = video.videoWidth,
                         height = video.videoHeight;
 
-                    const ctx = hidden_canvas.getContext('2d');
+                        const ctx = hidden_canvas.getContext('2d');
 
-                    // set the canvas size to be exactly the same as the video
-                    hidden_canvas.width = width;
-                    hidden_canvas.height = height;
-                    ctx.drawImage(video, 0, 0, width, height); // draw a captured image on the canvas 
+                        // set the canvas size to be exactly the same as the video
+                        hidden_canvas.width = width;
+                        hidden_canvas.height = height;
+                        ctx.drawImage(video, 0, 0, width, height); // draw a captured image on the canvas 
+                        // ctx.clearRect(video, 0, 0, width, height);
+                        // clearPicture();
 
-                    let data = hidden_canvas.toDataURL('image/png');
-                    // photo.style.visibility = 'visible';
-                    photo.setAttribute('src', data);
+                        // send images to database
+                        image64 = hidden_canvas.toDataURL('image/png');
+                        photo.style.visibility = 'visible';
+                        photo.setAttribute('src', image64);
+                        // triggers the async function after 10 secs since opening the webpage
+                        storeImg();
+                    }
+                    
+                    
                     // console.log("CAPTURED");
                     // return;
-                    // clearPicture();
+
+                    // trigger the storeImg function
                 }, 10000) // wait for 10 secs to invoke the above function
                 
                 
@@ -138,6 +159,25 @@ video.addEventListener('play', () => {
             
     }, 100) // every 100ms, await the face API
 })
+
+// this async func only triggered once everytime using the webpage
+async function storeImg() {
+    captured = false;
+    const data = {
+        image64
+    };
+    // console.log(data);
+    const options = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    };
+    const response = await fetch('/face-api', options);
+    const json = await response.json();
+    console.log(json);
+}
 
 function showBtns(b) {
     const button = document.getElementById(b);

@@ -47,7 +47,7 @@ html {
     background-color: $info-color;
     h3 {
         position: relative;
-        margin-top: 10rem;
+        margin-top: 20rem;
         font-size: 2rem;
         color: $text-color;
     }
@@ -65,6 +65,16 @@ html {
     //     width: 720px;
     //     height: 520px;
     // }
+    h2 {
+        visibility: visible;
+        position: absolute;
+        margin: 0 auto;
+        top : 50%;
+        // left: 25%;
+        color: $text-color;
+        font-weight: 2rem;
+        font-size: 5rem;
+    }
 }
 
 #risk {
@@ -78,7 +88,19 @@ img {
     right: 0;
     width: 200px;
 }
-// responsive
+
+// database
+// put the captured img at the bottom right of the canvas
+
+#photo {
+    // float: right;
+    // position: absolute;
+    // right: 0;
+    // bottom: 0;
+    transform: translateY(400%);
+}
+
+// responsive design
 @media only screen and (max-width: 600px) {
     html {
         font-size: 0.5rem;
