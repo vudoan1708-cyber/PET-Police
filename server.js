@@ -5,7 +5,8 @@ const app = express(); // setup express
 const http = require("http");
 const server = http.createServer(app);
 
-const database = new Datastore("database.db");
+const database = new Datastore("database/database.db"); // set up database object and set up the directory to where it will be saved
+database.loadDatabase(); // create a database file
 // const path = require('path'); // path to the logo 
 
 server.listen(port, () => console.log("listening"));
@@ -15,7 +16,7 @@ app.use(express.json({ limit: "1mb" })) // set limit for data transfer
 
 
 // save images to server
-app.post('/face-api', (request, response) => {
+app.post('/face-api/', (request, response) => {
     const data = request.body;
   
     const timestamp = Date.now();
@@ -24,7 +25,7 @@ app.post('/face-api', (request, response) => {
     let base64String = data.image64; // image data in Base64 format 
     let base64Image = base64String.split(';base64,').pop(); // remove header
     // write to file
-    require("fs").writeFile(`database/image.png`, base64Image, {encoding: 'base64'}, function(err) {
+    require("fs").writeFile(`database/img/image.png`, base64Image, {encoding: 'base64'}, function(err) {
       console.log('File created');
     });
   
@@ -32,3 +33,14 @@ app.post('/face-api', (request, response) => {
     response.json(data);
     // console.log(data);
   });
+
+app.get('/face-api/', (request, response) => {
+  database.find({}, (err, docs) => {
+    // console.log(docs);
+    if (err) {
+      console.error(err);
+      response.end();
+      return;
+    } else console.log(response.json(docs));
+  })
+})
