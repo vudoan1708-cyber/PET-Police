@@ -2,7 +2,6 @@ const MODEL_URL = 'face-api.js-master/weights';
 // const input = document.getElementById('my-face');
 
 const video = document.getElementById('video');
-const photo = document.getElementById('photo');
 const webcam_loading = document.getElementById('webcam_loading');
 let predictedAges = [];
 let gender = "";
@@ -20,6 +19,7 @@ let passiveness = 0; // contains neutral
 // storing images to database
 let captured = true;
 let image64 = null; // a variable to store images 
+let totalImg = 0;
 
 // load all the included models
 Promise.all([
@@ -116,6 +116,7 @@ video.addEventListener('play', () => {
                 setTimeout(() => { // run the code once
                     // get the exact size of the video element
                     if (captured) {
+                        captured = false;
                         let width = video.videoWidth,
                         height = video.videoHeight;
 
@@ -130,10 +131,9 @@ video.addEventListener('play', () => {
 
                         // send images to database
                         image64 = hidden_canvas.toDataURL('image/png');
-                        photo.style.visibility = 'visible';
-                        photo.setAttribute('src', image64);
-                        // triggers the async function after 10 secs since opening the webpage
-                        storeImg();
+                        
+                        // triggers the async functions after 10 secs since opening the webpage
+                        getImg().then(storeImg()).then(displayImg());
                     }
                     
                     
@@ -141,7 +141,7 @@ video.addEventListener('play', () => {
                     // return;
 
                     // trigger the storeImg function
-                }, 10000) // wait for 10 secs to invoke the above function
+                }, 10000) // wait for 10 secs to invoke the above functions
                 
                 
                 // document.body.removeChild(newDiv);
@@ -160,11 +160,20 @@ video.addEventListener('play', () => {
     }, 100) // every 100ms, await the face API
 })
 
+async function getImg() { // get total number of images from the database
+    const response = await fetch('/face-api/');
+    const data = await response.json();
+    // console.log(data);
+    totalImg = data.length;
+    console.log(totalImg);
+    return totalImg; // return the total number of images to the variable
+}
 // this async func only triggered once everytime using the webpage
-async function storeImg() {
-    captured = false;
+async function storeImg() { // capture an image and put it into the database of images
+    console.log(totalImg);
     const data = {
-        image64
+        image64,
+        totalImg
     };
     // console.log(data);
     const options = {
@@ -174,9 +183,27 @@ async function storeImg() {
         },
         body: JSON.stringify(data)
     };
-    const response = await fetch('/face-api', options);
+    const response = await fetch('/face-api/', options);
     const json = await response.json();
     console.log(json);
+}
+
+async function displayImg() { // get the images out and utilise them (display them in this scenario)
+    const response = await fetch('/face-api/');
+    const data = await response.json();
+    // console.log(data);
+    totalImg = data.length;
+    // console.log(totalImg); 
+    for (let i = 0; i < data.length; i++) {
+        const photo = document.createElement('img');
+        // photo.style.visibility = 'visible';
+        photo.setAttribute('src', data[i].image64);
+        document.body.appendChild(photo);
+        // photo.style.position = 'absolute';
+        // photo.style.bottom = 0;
+        // photo.style.right = 0;
+        photo.style.transform = 'translateY(400%)';
+    }
 }
 
 function showBtns(b) {

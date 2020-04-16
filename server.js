@@ -18,20 +18,19 @@ app.use(express.json({ limit: "1mb" })) // set limit for data transfer
 // save images to server
 app.post('/face-api/', (request, response) => {
     const data = request.body;
-  
+    // console.log(data.totalImg);
     const timestamp = Date.now();
     data.timestamp = timestamp;
   
     let base64String = data.image64; // image data in Base64 format 
     let base64Image = base64String.split(';base64,').pop(); // remove header
     // write to file
-    require("fs").writeFile(`database/img/image.png`, base64Image, {encoding: 'base64'}, function(err) {
+    require("fs").writeFile(`database/img/image${data.totalImg + 1}.png`, base64Image, {encoding: 'base64'}, function(err) {
       console.log('File created');
     });
   
     database.insert(data);
     response.json(data);
-    // console.log(data);
   });
 
 app.get('/face-api/', (request, response) => {
@@ -41,6 +40,6 @@ app.get('/face-api/', (request, response) => {
       console.error(err);
       response.end();
       return;
-    } else console.log(response.json(docs));
+    } else response.json(docs);
   })
 })
