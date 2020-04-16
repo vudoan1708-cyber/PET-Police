@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Face-API</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        /* video {
+            position: fixed;
+            left: 0;
+            top: 0;
+            min-width: 100%;
+            min-height: 100%;
+        } */
+        canvas {
+            position: absolute;
+        }
+    </style>
+</head>
+<body>
+    <script defer src="face-api.js-master/dist/face-api.js"></script> <!-- defer is used like await -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.0.0/p5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.9.0/addons/p5.dom.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.9.0/addons/p5.sound.min.js"></script>
+
+    <script defer src="sketch.js"></script>
+
+    <!-- navigation -->
+    <nav id="nav">
+        <button class="arrow" onclick="showBtns('btn')">Click Me</button>
+        <!-- buttons -->
+        <div id="btn" style="display: none">
+            <div class="about" onclick="about()">About</div>
+            <div class="vis" onclick="vis()">Visualisations</div>
+        </div>
+    </nav>
+    
+    <!-- main content -->
+    <div class="wrapper">
+        <video id="video" width="720" height="520" autoplay muted></video>
+        
+        <!-- <div id="age"></div> -->
+    </div>
+    <div id="stats">
+        <h3>DETAIL:</h3>
+        <p id="gender"></p>
+        <p id="age"></p>
+        <p id="aggressiveness"></p>
+        <p id="suspiciousness"></p>
+        <p id="passiveness"></p>
+    </div>
+    <div id="risk"></div>
+    <img src="../assets/police_logo.svg" alt="a logo">
+    
+
+    <!-- captured img -->
+    <canvas id="canvas"></canvas>
+    <img id="photo" alt="The screen capture will appear here" style="visibility: hidden">
+    
+</body>
+</html>

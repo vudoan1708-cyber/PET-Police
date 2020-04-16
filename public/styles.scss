@@ -1,0 +1,86 @@
+$bg-color: rgb(41, 40, 40);
+$wrapper-color: rgb(9, 0, 50);
+$info-color: rgb(0, 0, 0);
+$text-color: rgb(200, 200, 200);
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    background-color: $bg-color;
+    font-size: 10px;
+}
+
+#nav {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    .arrow {
+        position: relative;
+        padding: 2rem;
+        background-color: $wrapper-color;
+        color: $text-color;
+    }
+    #btn {
+        position: relative;
+        right: 0;
+        .about, .vis {
+            padding: 3rem;
+            font-size: 2rem;
+            background-color: $info-color;
+            color: $text-color;
+        }
+    }
+    
+}
+
+#stats {
+    position: absolute;
+    padding: 20px;
+    top: 0;
+    left: 0;
+    min-height: 100%;
+    min-width: 10%;
+    background-color: $info-color;
+    h3 {
+        position: relative;
+        margin-top: 10rem;
+        font-size: 2rem;
+        color: $text-color;
+    }
+    #gender, #age, #aggressiveness, #suspiciousness, #passiveness {
+        position: relative;
+        padding: 10px;
+        // text-align: center;
+        font-size: 1.75rem;
+    }
+}
+
+.wrapper {
+    background-color: $wrapper-color;
+    // #video {
+    //     width: 720px;
+    //     height: 520px;
+    // }
+}
+
+#risk {
+    text-align: center;
+    font-size: 6rem;
+}
+
+img {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 200px;
+}
+// responsive
+@media only screen and (max-width: 600px) {
+    html {
+        font-size: 0.5rem;
+    }
+  }
