@@ -37,6 +37,17 @@ html {
     
 }
 
+//warning box 
+.warning {
+    position: absolute;
+    padding: 10px;
+    border: 2px solid #f39389;
+    border-radius: 2px;
+    background-color: #fbd8d4;
+    color: #3b3c40;
+    font-size: 1.25rem;
+}
+
 #stats {
     position: absolute;
     padding: 20px;

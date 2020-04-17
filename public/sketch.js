@@ -20,13 +20,15 @@ let passiveness = 0; // contains neutral
 let captured = true;
 let image64 = null; // a variable to store images 
 let totalImg = 0;
+let imgData = null;
 
 // load all the included models
 Promise.all([
     faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL),
     faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL),
     faceapi.nets.faceExpressionNet.loadFromUri(MODEL_URL),
-    faceapi.nets.ageGenderNet.loadFromUri(MODEL_URL)
+    faceapi.nets.ageGenderNet.loadFromUri(MODEL_URL),
+    getImg() // and trigger the getImg() function
 ]).then(startVideo) // then start the video playing
 
 // function setup() {
@@ -63,7 +65,7 @@ video.addEventListener('play', () => {
             faceapi.draw.drawFaceExpressions(canvas, resizedDetections); // detect expressions
             // console.log(resizedDetections[0]);
             if (resizedDetections) {
-                age = resizedDetections[0].age;
+                age = Math.round(resizedDetections[0].age);
                 gender = resizedDetections[0].gender;
                 // aggressiveness
                 const angry = resizedDetections[0].expressions.angry;
@@ -95,12 +97,12 @@ video.addEventListener('play', () => {
                 drawPass();
                 if (riskLevel < 1000) { // if risk level is less than 1000 score
                     if (ageScore <= 400) { // if age score is less 400
-                        if (age > 17 && age < 50) ageScore = (40 - (age - 16) * 10); // add score to the total age score
+                        if (age > 17 && age < 50) ageScore = Math.round((40 - (age - 16) * 10)); // add score to the total age score
                     }
                     if (exScore <= 300) { // if expression score is less 300
-                        aggressiveness = angry * 100;
-                        suspiciousness = (fearful + sad) / 2 * 100;
-                        passiveness = neutral * 100;
+                        aggressiveness = Math.round(angry * 100);
+                        suspiciousness = Math.round((fearful + sad) / 2 * 100);
+                        passiveness = Math.round(neutral * 100);
                         exScore = (aggressiveness * 2 + suspiciousness * 2 + (100 - passiveness));
                         // console.log(exScore);
                     }
@@ -109,39 +111,40 @@ video.addEventListener('play', () => {
                         if (gender === 'male') genderScore = 300;
                         else genderScore = 150;
                     }
-                    riskLevel = (ageScore + exScore + genderScore) / 10;
+                    riskLevel = Math.round((ageScore + exScore + genderScore) / 10);
                     // console.log(riskLevel);
                     riskDisplay();
                 }
-                setTimeout(() => { // run the code once
-                    // get the exact size of the video element
-                    if (captured) {
-                        captured = false;
-                        let width = video.videoWidth,
-                        height = video.videoHeight;
-
-                        const ctx = hidden_canvas.getContext('2d');
-
-                        // set the canvas size to be exactly the same as the video
-                        hidden_canvas.width = width;
-                        hidden_canvas.height = height;
-                        ctx.drawImage(video, 0, 0, width, height); // draw a captured image on the canvas 
-                        // ctx.clearRect(video, 0, 0, width, height);
-                        // clearPicture();
-
-                        // send images to database
-                        image64 = hidden_canvas.toDataURL('image/png');
+                return new Promise(() => {
+                    setTimeout(() => { // run the code once
+                        // get the exact size of the video element
+                        if (captured) {
+                            captured = false;
+                            let width = video.videoWidth,
+                            height = video.videoHeight;
+    
+                            const ctx = hidden_canvas.getContext('2d');
+    
+                            // set the canvas size to be exactly the same as the video
+                            hidden_canvas.width = width;
+                            hidden_canvas.height = height;
+                            ctx.drawImage(video, 0, 0, width, height); // draw a captured image on the canvas 
+                            // ctx.clearRect(video, 0, 0, width, height);
+                            // clearPicture();
+    
+                            // send images to database
+                            image64 = hidden_canvas.toDataURL('image/png');
+                            
+                            // triggers the async function after 10 secs since opening the webpage
+                            utiliseImg();
+                        }
                         
-                        // triggers the async functions after 10 secs since opening the webpage
-                        get_store_displayImg();
-                    }
-                    
-                    
-                    // console.log("CAPTURED");
-                    // return;
-
-                    // trigger the storeImg function
-                }, 10000) // wait for 10 secs to invoke the above functions
+                        
+                        // console.log("CAPTURED");
+                        // return;
+    
+                    }, 10000)// wait for 10 secs to invoke the above function
+                }); // end of promise
                 
                 
                 // document.body.removeChild(newDiv);
@@ -164,25 +167,85 @@ video.addEventListener('play', () => {
     
 //     return totalImg; // return the total number of images to the variable
 // }
-// this async func only triggered once everytime using the webpage
+// display warning message
+let warningBox = document.createElement("div");
+let visualisation_btn = document.querySelector(".vis");
+warningBox.className = "warning";
+
+function displayWarning(msg) {
+    warningBox.innerHTML = msg;
+
+    if (document.body.contains(warningBox)) {
+        clearTimeout(warningTimeout);
+    } else {
+        // insert warningBox after visualisation_btn
+        visualisation_btn.parentNode.insertBefore(warningBox, visualisation_btn.nextSibling);
+    }
+
+    // clear the warningBox after 2 secs
+    warningTimeout = setTimeout(() => {
+        warningBox.parentNode.removeChild(warningBox);
+        warningTimeout = -1;
+    }, 2000);
+}
+
+// display images
+function displayImg() {
+    if (imgData.length == 0) { // if there is no image in the database
+        console.log("No Image From Database"); 
+        // display a warning box message
+        displayWarning("No Image From The Database."
+                        + "\n" + "Capture Your Face To Store An Image");
+    } else {
+        for (let i = 0; i < imgData.length; i++) {
+            console.log(imgData.length);
+            const photo = document.createElement('img');
+            // photo.style.visibility = 'visible';
+            photo.setAttribute('src', imgData[i].image64);
+            document.body.appendChild(photo);
+            // photo.style.position = 'absolute';
+            // photo.style.bottom = 0;
+            // photo.style.right = 0;
+            photo.style.transform = 'translateY(400%)';
+        }
+    }  
+}
+
 // async function storeImg() { 
     
 // }
 
-async function get_store_displayImg() {
-    // get total number of images from the database
-    const response = await fetch('/face-api/'); 
-    const data_count = await response.json();
-    // console.log(img);
-    totalImg = data_count.length + 1; // pass the length of the database starting from 1 into a global variable
-                            //(equivalent to and mainly for the number of images)
 
+// look for any existing image file in the database before the image capturing,
+// in case users only want to see the visualisations
+// and don't want to be taken a photo
+async function getImg() {
+    const old_data = await fetch('/face-api/');
+    imgData = await old_data.json();
+    console.log(imgData);
+    return imgData;
+}
+
+async function utiliseImg() {
+    // get total number of images from the database
+    const get_data = await fetch('/face-api/'); 
+    const data_count = await get_data.json();
+    // console.log(data_count);
+    totalImg = data_count.length + 1; // pass the length of the database starting from 0 into a global variable
+                            //(equivalent to and mainly for the number of images)
 
     // capture an image and put it into the database of images
     // start posting data to the database
+    // console.log(totalImg);
     const data = { // including
         image64, // images
-        totalImg // and the number of them
+        totalImg, // the total number of them
+        aggressiveness, // the expression scores
+        suspiciousness,
+        passiveness,
+        age, // age
+        gender, // gender
+        riskLevel // and risk level
     };
     const options = {
         method: 'POST',
@@ -191,25 +254,15 @@ async function get_store_displayImg() {
         },
         body: JSON.stringify(data)
     };
-    const res = await fetch('/face-api/', options);
-    const json = await res.json();
+    const store_response = await fetch('/face-api/', options);
+    const json = await store_response.json();
     console.log(json);
 
     // get the images out and utilise them (display them in this scenario)
-    const resp = await fetch('/face-api/');
-    const utilised_data = await resp.json();
-    console.log(utilised_data);
-    // console.log(totalImg); 
-    for (let i = 0; i < utilised_data.length; i++) {
-        const photo = document.createElement('img');
-        // photo.style.visibility = 'visible';
-        photo.setAttribute('src', utilised_data[i].image64);
-        document.body.appendChild(photo);
-        // photo.style.position = 'absolute';
-        // photo.style.bottom = 0;
-        // photo.style.right = 0;
-        photo.style.transform = 'translateY(400%)';
-    }
+    const response = await fetch('/face-api/');
+    imgData = await response.json();
+    // console.log(imgData); 
+    // console.log(totalImg);  
 }
 
 function showBtns(b) {
@@ -238,7 +291,7 @@ function drawAggr() {
     newDiv.style.position = "absolute";
     newDiv.style.top = "50%";
     newDiv.style.left = "0";
-    newDiv.innerHTML = "Aggressiveness: " + Math.round(aggressiveness) + "%";
+    newDiv.innerHTML = "Aggressiveness: " + (aggressiveness) + "%";
 }
 
 function drawSusp() {
@@ -247,7 +300,7 @@ function drawSusp() {
     newDiv.style.position = "absolute";
     newDiv.style.top = "60%";
     newDiv.style.left = "0";
-    newDiv.innerHTML = "Suspiciousness: " + Math.round(suspiciousness) + "%";
+    newDiv.innerHTML = "Suspiciousness: " + (suspiciousness) + "%";
 }
 
 function drawPass() {
@@ -256,7 +309,7 @@ function drawPass() {
     newDiv.style.position = "absolute";
     newDiv.style.top = "70%";
     newDiv.style.left = "0";
-    newDiv.innerHTML = "Passiveness: " + Math.round(passiveness) + "%";
+    newDiv.innerHTML = "Passiveness: " + (passiveness) + "%";
 }
 
 function drawAge() {
@@ -267,7 +320,7 @@ function drawAge() {
     newDiv.style.top = "40%";
     newDiv.style.left = "0";
     // newDiv.style.text-align = "center";
-    newDiv.innerHTML = "Age: " + Math.round(age);
+    newDiv.innerHTML = "Age: " + (age);
 }
 
 function drawGender() {
@@ -292,7 +345,7 @@ function riskDisplay() {
     newDiv.style.position = "absolute";
     newDiv.style.bottom = "0";
     newDiv.style.left = "10%";
-    if (riskLevel > 0 && riskLevel < 100) newDiv.innerHTML = Math.round(riskLevel) + "% Risk";
+    if (riskLevel > 0 && riskLevel < 100) newDiv.innerHTML = (riskLevel) + "% Risk";
 
 }
 
