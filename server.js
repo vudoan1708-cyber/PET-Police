@@ -34,12 +34,13 @@ app.post('/face-api/', (request, response) => {
   });
 
 app.get('/face-api/', (request, response) => {
-  database.find({}, (err, docs) => {
+  // find all data from database, sort them by totalImg and execute 2 functions
+  database.find({}).sort({ totalImg: 1 }).exec((err, data) => { 
     // console.log(docs);
     if (err) {
       console.error(err);
       response.end();
       return;
-    } else response.json(docs);
+    } else response.json(data);
   })
 })

@@ -1,9 +1,13 @@
 const MODEL_URL = 'face-api.js-master/weights';
-// const input = document.getElementById('my-face');
 
+// video related elements
 const video = document.getElementById('video');
 const webcam_loading = document.getElementById('webcam_loading');
-let predictedAges = [];
+
+// countdown timer
+let timeCountdown = 10; // show the time countdown on screen so users can see it
+let timer = document.getElementById('timer');
+
 let gender = "";
 let age = 0;
 
@@ -19,8 +23,8 @@ let passiveness = 0; // contains neutral
 // storing images to database
 let captured = true;
 let image64 = null; // a variable to store images 
-let totalImg = 0;
-let imgData = null;
+let totalImg = 0; // a variable to keep track of total number of images in the database
+let imgData = []; // a variable to store JSON image data
 
 // load all the included models
 Promise.all([
@@ -45,6 +49,16 @@ function startVideo() {
 
 video.addEventListener('play', () => {
     // console.log('Playing');
+    
+    setInterval(() => {
+        // countdown timer
+        // show the users the timer before a photo capture
+        if (timeCountdown > 0) { // if the time is still larger than 0
+            timer.innerHTML = timeCountdown + ' second(s)';
+        }
+        timeCountdown--;
+    }, 1000);
+    
     webcam_loading.style.visibility = 'hidden'; // get rid of the text when webcam is loaded
 
     const hidden_canvas = document.getElementById('canvas');
@@ -75,8 +89,6 @@ video.addEventListener('play', () => {
                 // passiveness
                 const neutral = resizedDetections[0].expressions.neutral;
 
-                // const expressions = resizedDetections[0].expressions;
-                // console.log(resizedDetections[0].expressions);
                 // const interpolatedAge = interpolatedAgePredictions(age);
                 // console.log(interpolatedAge);
 
@@ -115,8 +127,11 @@ video.addEventListener('play', () => {
                     // console.log(riskLevel);
                     riskDisplay();
                 }
+
+                // after all the fluctuation of the risk factors and risk level calculation, and detections
+                // don't do anything else until it captures a photo
                 return new Promise(() => {
-                    setTimeout(() => { // run the code once
+                    setTimeout(() => { 
                         // get the exact size of the video element
                         if (captured) {
                             captured = false;
@@ -128,11 +143,14 @@ video.addEventListener('play', () => {
                             // set the canvas size to be exactly the same as the video
                             hidden_canvas.width = width;
                             hidden_canvas.height = height;
-                            ctx.drawImage(video, 0, 0, width, height); // draw a captured image on the canvas 
+                            // draw a captured image on the canvas 
+                            ctx.drawImage(video, 0, 0, width, height); 
+                            // then hide it because it's blocking the veideo webcam, which is useless
+                            hidden_canvas.style.visibility = "hidden";
                             // ctx.clearRect(video, 0, 0, width, height);
                             // clearPicture();
     
-                            // send images to database
+                            // convert captured image into characters
                             image64 = hidden_canvas.toDataURL('image/png');
                             
                             // triggers the async function after 10 secs since opening the webpage
@@ -153,13 +171,6 @@ video.addEventListener('play', () => {
                 // canvas.getContext('2d').clearRect(canvas.width / 2, canvas.height / 2, );
                 // newDiv.innerHTML = "";
             }
-            //     const box_Y = resizedDetections[0].detection.box.y;
-
-            // if (box_Y < 50) {
-            //     console.log(box_Y);
-
-            // }
-            
     }, 100) // every 100ms, await the face API
 })
 
@@ -169,10 +180,12 @@ video.addEventListener('play', () => {
 // }
 // display warning message
 let warningBox = document.createElement("div");
-let visualisation_btn = document.querySelector(".vis");
+let visualisation_btn = document.querySelector(".preview");
 warningBox.className = "warning";
 
+
 function displayWarning(msg) {
+    // display the warning message
     warningBox.innerHTML = msg;
 
     if (document.body.contains(warningBox)) {
@@ -182,14 +195,14 @@ function displayWarning(msg) {
         visualisation_btn.parentNode.insertBefore(warningBox, visualisation_btn.nextSibling);
     }
 
-    // clear the warningBox after 2 secs
+    // clear the warning message after 2 secs
     warningTimeout = setTimeout(() => {
         warningBox.parentNode.removeChild(warningBox);
         warningTimeout = -1;
     }, 2000);
 }
 
-// display images
+// visualise images from the database
 function displayImg() {
     if (imgData.length == 0) { // if there is no image in the database
         console.log("No Image From Database"); 
@@ -197,18 +210,21 @@ function displayImg() {
         displayWarning("No Image From The Database."
                         + "\n" + "Capture Your Face To Store An Image");
     } else {
-        for (let i = 0; i < imgData.length; i++) {
-            console.log(imgData.length);
-            const photo = document.createElement('img');
-            // photo.style.visibility = 'visible';
-            photo.setAttribute('src', imgData[i].image64);
-            document.body.appendChild(photo);
-            // photo.style.position = 'absolute';
-            // photo.style.bottom = 0;
-            // photo.style.right = 0;
-            photo.style.transform = 'translateY(400%)';
-        }
-    }  
+        console.log("WILL LINK TO ANOTHER PAGE");
+    }
+}
+
+// preview image captured img
+async function previewImg() {
+    // get the images out and utilise them (display them in this scenario)
+    const response = await fetch('/face-api/');
+    imgData = await response.json();
+
+    const photo = document.createElement('img');
+    photo.className = "one_img";
+    // preview the most recent photo capture
+    photo.setAttribute('src', imgData[imgData.length - 1].image64);
+    document.body.appendChild(photo);
 }
 
 // async function storeImg() { 
@@ -226,7 +242,9 @@ async function getImg() {
     return imgData;
 }
 
+// after a photo capture
 async function utiliseImg() {
+    timer.innerHTML = "CAPTURED";
     // get total number of images from the database
     const get_data = await fetch('/face-api/'); 
     const data_count = await get_data.json();
@@ -236,7 +254,6 @@ async function utiliseImg() {
 
     // capture an image and put it into the database of images
     // start posting data to the database
-    // console.log(totalImg);
     const data = { // including
         image64, // images
         totalImg, // the total number of them
@@ -257,12 +274,7 @@ async function utiliseImg() {
     const store_response = await fetch('/face-api/', options);
     const json = await store_response.json();
     console.log(json);
-
-    // get the images out and utilise them (display them in this scenario)
-    const response = await fetch('/face-api/');
-    imgData = await response.json();
-    // console.log(imgData); 
-    // console.log(totalImg);  
+    visualisation_btn.style.visibility = "visible";
 }
 
 function showBtns(b) {

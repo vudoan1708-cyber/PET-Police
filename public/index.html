@@ -28,12 +28,16 @@
     </style>
 </head>
 <body>
-    <script defer src="face-api.js-master/dist/face-api.js"></script> <!-- defer is used like await -->
+    <!-- defer is like a HTML-version of asynchronous function in js -->
+    <script defer src="face-api.js-master/dist/face-api.js"></script> 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.0.0/p5.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.9.0/addons/p5.dom.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.9.0/addons/p5.sound.min.js"></script>
-    <!-- <script type="text/javascript" src="https://sdk.clarifai.com/js/clarifai-latest.js"></script> -->
     <script defer src="sketch.js"></script>
+
+    <!-- countdown -->
+    <h2 id="countdown">Countdown for A Photo Capture</h2>
+    <div id="timer"></div>
 
     <!-- navigation -->
     <nav id="nav">
@@ -49,9 +53,10 @@
     <div class="wrapper">
         <h2 id="webcam_loading">WEBCAM LOADING...</h2>
         <video id="video" width="720" height="520" autoplay muted></video>
-        
         <!-- <div id="age"></div> -->
     </div>
+    <button class="preview" style="visibility: hidden" onclick="previewImg()">Preview >>></button>
+
     <div id="stats">
         <h3>DETAILS</h3>
         <p id="gender"></p>
@@ -61,7 +66,7 @@
         <p id="passiveness"></p>
     </div>
     <div id="risk"></div>
-    <img src="assets/police_logo.svg" alt="a logo">
+    <img id="logo" src="assets/police_logo.svg" alt="a logo">
     
 
     <!-- captured img -->

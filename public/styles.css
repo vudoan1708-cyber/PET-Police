@@ -10,6 +10,18 @@ html {
   font-size: 10px;
 }
 
+h2#countdown, #timer {
+  position: absolute;
+  left: 40%;
+  top: 5%;
+  color: #c8c8c8;
+  font-size: 2.75rem;
+}
+
+#timer {
+  top: 10%;
+}
+
 #nav {
   position: absolute;
   right: 0;
@@ -82,21 +94,33 @@ html {
   font-size: 5rem;
 }
 
+.preview {
+  position: absolute;
+  bottom: 0;
+  padding: 3rem;
+  font-size: 2rem;
+  background-color: black;
+  color: #c8c8c8;
+  border-radius: 2px;
+}
+
 #risk {
   text-align: center;
   font-size: 6rem;
 }
 
-img {
+img#logo {
   position: absolute;
   top: 0;
   right: 0;
   width: 200px;
 }
 
-#photo {
-  -webkit-transform: translateY(400%);
-          transform: translateY(400%);
+.one_img {
+  position: absolute;
+  right: 0 !important;
+  bottom: 0 !important;
+  width: 200px;
 }
 
 @media only screen and (max-width: 600px) {
