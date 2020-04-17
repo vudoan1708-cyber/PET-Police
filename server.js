@@ -25,7 +25,7 @@ app.post('/face-api/', (request, response) => {
     let base64String = data.image64; // image data in Base64 format 
     let base64Image = base64String.split(';base64,').pop(); // remove header
     // write to file
-    require("fs").writeFile(`database/img/image${data.totalImg + 1}.png`, base64Image, {encoding: 'base64'}, function(err) {
+    require("fs").writeFile(`database/img/image${data.totalImg}.png`, base64Image, {encoding: 'base64'}, function(err) {
       console.log('File created');
     });
   

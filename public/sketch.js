@@ -133,7 +133,7 @@ video.addEventListener('play', () => {
                         image64 = hidden_canvas.toDataURL('image/png');
                         
                         // triggers the async functions after 10 secs since opening the webpage
-                        getImg().then(storeImg()).then(displayImg());
+                        get_store_displayImg();
                     }
                     
                     
@@ -160,22 +160,30 @@ video.addEventListener('play', () => {
     }, 100) // every 100ms, await the face API
 })
 
-async function getImg() { // get total number of images from the database
-    const response = await fetch('/face-api/');
-    const data = await response.json();
-    // console.log(data);
-    totalImg = data.length;
-    console.log(totalImg);
-    return totalImg; // return the total number of images to the variable
-}
+// async function getImg() { 
+    
+//     return totalImg; // return the total number of images to the variable
+// }
 // this async func only triggered once everytime using the webpage
-async function storeImg() { // capture an image and put it into the database of images
-    console.log(totalImg);
-    const data = {
-        image64,
-        totalImg
+// async function storeImg() { 
+    
+// }
+
+async function get_store_displayImg() {
+    // get total number of images from the database
+    const response = await fetch('/face-api/'); 
+    const data_count = await response.json();
+    // console.log(img);
+    totalImg = data_count.length + 1; // pass the length of the database starting from 1 into a global variable
+                            //(equivalent to and mainly for the number of images)
+
+
+    // capture an image and put it into the database of images
+    // start posting data to the database
+    const data = { // including
+        image64, // images
+        totalImg // and the number of them
     };
-    // console.log(data);
     const options = {
         method: 'POST',
         headers: {
@@ -183,21 +191,19 @@ async function storeImg() { // capture an image and put it into the database of 
         },
         body: JSON.stringify(data)
     };
-    const response = await fetch('/face-api/', options);
-    const json = await response.json();
+    const res = await fetch('/face-api/', options);
+    const json = await res.json();
     console.log(json);
-}
 
-async function displayImg() { // get the images out and utilise them (display them in this scenario)
-    const response = await fetch('/face-api/');
-    const data = await response.json();
-    // console.log(data);
-    totalImg = data.length;
+    // get the images out and utilise them (display them in this scenario)
+    const resp = await fetch('/face-api/');
+    const utilised_data = await resp.json();
+    console.log(utilised_data);
     // console.log(totalImg); 
-    for (let i = 0; i < data.length; i++) {
+    for (let i = 0; i < utilised_data.length; i++) {
         const photo = document.createElement('img');
         // photo.style.visibility = 'visible';
-        photo.setAttribute('src', data[i].image64);
+        photo.setAttribute('src', utilised_data[i].image64);
         document.body.appendChild(photo);
         // photo.style.position = 'absolute';
         // photo.style.bottom = 0;
