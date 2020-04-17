@@ -145,7 +145,7 @@ video.addEventListener('play', () => {
                             hidden_canvas.height = height;
                             // draw a captured image on the canvas 
                             ctx.drawImage(video, 0, 0, width, height); 
-                            // then hide it because it's blocking the veideo webcam, which is useless
+                            // then hide it because it's blocking the video webcam, which is useless
                             hidden_canvas.style.visibility = "hidden";
                             // ctx.clearRect(video, 0, 0, width, height);
                             // clearPicture();
@@ -154,7 +154,7 @@ video.addEventListener('play', () => {
                             image64 = hidden_canvas.toDataURL('image/png');
                             
                             // triggers the async function after 10 secs since opening the webpage
-                            utiliseImg();
+                            storeImg();
                         }
                         
                         
@@ -211,6 +211,7 @@ function displayImg() {
                         + "\n" + "Capture Your Face To Store An Image");
     } else {
         console.log("WILL LINK TO ANOTHER PAGE");
+        location.href = "profiles/profiles.html"; // link to the profiles file
     }
 }
 
@@ -243,7 +244,7 @@ async function getImg() {
 }
 
 // after a photo capture
-async function utiliseImg() {
+async function storeImg() {
     timer.innerHTML = "CAPTURED";
     // get total number of images from the database
     const get_data = await fetch('/face-api/'); 
