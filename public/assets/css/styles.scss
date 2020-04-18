@@ -42,6 +42,7 @@ h2#countdown {
         position: relative;
         right: 0;
         .about, .vis {
+            display: block;
             padding: 3rem;
             font-size: 2rem;
             background-color: $info-color;

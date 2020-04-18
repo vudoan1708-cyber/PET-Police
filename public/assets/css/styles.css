@@ -41,6 +41,7 @@ h2#countdown, #timer {
 }
 
 #nav #btn .about, #nav #btn .vis {
+  display: block;
   padding: 3rem;
   font-size: 2rem;
   background-color: black;
