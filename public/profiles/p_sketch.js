@@ -7,7 +7,15 @@ let pass = []; // variable to store passiveness score
 let age = []; // variable to store the age
 let gender = [""]; // variable to store gender in string formata
 let riskLevel = []; // variable to store total risk factors
+let timeStamp = []; // variable to store the timestamp
+let date = []; // variable to store the date
+let time = []; // variable to store the time
 
+// arrow button sizes
+const arrow_w = 50,
+      arrow_h = 38;
+
+// loading animation
 let loading = true;
 let loadingCounter = 0;
 
@@ -49,7 +57,12 @@ function setup() {
                 age[j] = storedData[j].age; 
                 gender[j] = storedData[j].gender.charAt(0).toUpperCase(); 
                 riskLevel[j] = storedData[j].riskLevel; 
-                // console.log(j);
+                // get the timestamp
+                timeStamp[j] = storedData[j].timestamp.split('T');
+                // separate the string into an array of two elements from the separator, then get the date
+                date[j] = timeStamp[j][0];
+                time[j] = timeStamp[j][1].split('.')[0]; // get the time in seconds
+                // console.log(timeStamp[j], date[j]);
             }
             left_arrow = loadImage('../assets/img/left_arrow.png', MediaLoader(storedData.length));
         })
@@ -77,9 +90,7 @@ function windowResized() {
     resizeCanvas(window.innerWidth, window.innerHeight);
 }
 
-// arrow button sizes
-const arrow_w = 50,
-      arrow_h = 38;
+
 // display the profiles on webpage
 function displayProfiles() {
     // images related parameters
@@ -256,6 +267,14 @@ function mousePressed() {
                 visualiseData = true;
             }
         }
+    } else {
+        // close button 
+        const r = 50;
+        let d = dist(mouseX, mouseY, width - 25, 25);
+        if (d < 25) {
+            console.log("CLOSED");
+            visualiseData = false;
+        }
     }
 }
 
@@ -269,6 +288,8 @@ function keyPressed() {
 
     if (keyCode === ESCAPE) {
         visualiseData = false;
+    } else if (key == ' ') {
+        visualiseData = true;
     }
 }
 

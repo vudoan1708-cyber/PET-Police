@@ -19,8 +19,14 @@ app.use(express.json({ limit: "1mb" })) // set limit for data transfer
 app.post('/face-api/', (request, response) => {
     const data = request.body;
     // console.log(data.totalImg);
-    const timestamp = Date.now();
-    data.timestamp = timestamp;
+    const timeStamp = Date.now();
+    // create a new Date object based on the timestamp
+    const getDate = new Date(timeStamp);
+    // for some reason, the hours in the getDate variable is 1 hour earlier than the current ones
+    // so plus one to get the exactly hours
+    getDate.setHours(getDate.getHours() + 1);
+    // console.log(getDate);
+    data.timestamp = getDate;
   
     let base64String = data.image64; // image data in Base64 format 
     let base64Image = base64String.split(';base64,').pop(); // remove header
