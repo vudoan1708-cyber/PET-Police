@@ -13,12 +13,11 @@ let loadingCounter = 0;
 
 // booleans
 let moveBackwards = false,
-    moveForwards =  false;
+    moveForwards =  false,
+    visualiseData = false;
 
-// image size
-let x = 0,
-    w = 320,
-    h = 240;
+// class(es)
+let imgDisplay;
 
 // animate image gallery
 let gallery_move = 1;
@@ -62,6 +61,9 @@ function setup() {
     rectMode(CENTER);
     imageMode(CENTER);
     textAlign(CENTER);
+
+    // class
+    imgDisplay = new ImgDisplay();
 }
 
 function draw() {
@@ -81,7 +83,7 @@ const arrow_w = 50,
 // display the profiles on webpage
 function displayProfiles() {
     // images related parameters
-    let y = height / 2;
+    // let y = height / 2;
 
     // titles and its background
     push();
@@ -122,70 +124,53 @@ function displayProfiles() {
         image(left_arrow, 0, 0, arrow_w, arrow_h);
     pop();
 
-
-    // image gallery
-    if ( gallery_move > 1 && gallery_move < (storedData.length) * 2 - ((width / (2 * w) * 2)) ) { 
-    // steps needed < number of steps to get through all the images stored in the database - number of steps to display images to half of the screen
-    // because that is how it is by default (half a screen is full with images)
-    // each incremental step = half an image size
-        for (let i = 0; i < images.length; i++) {
-            x = ((w * i) + width / 2) - (w * gallery_move / 2);
-            // if (mouseX > (-x / 2) && mouseX < (x / 2)) {
-            //     if (mouseY > (-y / 2) && mouseY < (y / 2)) {
-            //         console.log("HOVERED");
-            //         scale(1.5, 1.5);
-            //     }
-            // }
-            image(images[i], x, y, w, h);
-        }
-    } else {
-        gallery_move = 1;
-        for (let i = 0; i < images.length; i++) {
-            x = (w * i) + width / 2;
-            // if (mouseX > (-x / 2) && mouseX < (x / 2)) {
-            //     if (mouseY > (-y / 2) && mouseY < (y / 2)) {
-            //         console.log("HOVERED");
-            //         scale(1.5, 1.5);
-            //     }
-            // }
-            image(images[i], x, y, w, h);
-        }
-    }
+    // push();
+    // // can't translate to x because x is a constantly changed variable
+    // // so horizontally translate to the centre of the page as the first x is supposed to do
+    // pop();
     
     // image gallery control
     if (moveBackwards) {
         moveBackwards = false;
         gallery_move--;
-        console.log(gallery_move)
     } else if (moveForwards) {
         moveForwards = false;
         gallery_move++;
-        console.log(gallery_move)
+
     }
 
     // draw some horizontal lines for decorations
     push();
         stroke(255);
         strokeWeight(5);
-        line(0, height / 2 - h / 2, width, height / 2 - h / 2);
-        line(0, height / 2 + h / 2, width, height / 2 + h / 2);
+        line(0, height / 2 - imgDisplay.h / 2, width, height / 2 - imgDisplay.h / 2);
+        line(0, height / 2 + imgDisplay.h / 2, width, height / 2 + imgDisplay.h / 2);
 
         stroke(255, 100);
         strokeWeight(15);
-        line(0, height / 2 - h / 2, width, height / 2 - h / 2);
-        line(0, height / 2 + h / 2, width, height / 2 + h / 2);
+        line(0, height / 2 - imgDisplay.h / 2, width, height / 2 - imgDisplay.h / 2);
+        line(0, height / 2 + imgDisplay.h / 2, width, height / 2 + imgDisplay.h / 2);
     pop();
 
-    // draw forward and backward arrows for image gallery
+    // display image gallery
+    drawImg();
+
+    // display backwards button and forwards button for image gallery
+    drawGalleryNavigation();
+}
+
+function drawGalleryNavigation() {
     push();
-        push();
+        if (!visualiseData) {
+            // draw forward and backward arrows for image gallery
+            push();
             // backward button
             // hide it if it gets less than 1, so users stop pressing it
             if (gallery_move > 1) {
-                translate(width / 2 - 100, height / 2 + h);
+                translate(width / 2 - 100, height / 2 + imgDisplay.h);
                 // hover backward button
                 if (mouseX > width / 2 - 150 && mouseX < width / 2 - 45) {
-                    if (mouseY > height / 2 + h - 35 && mouseY < height / 2 + h + 45) {
+                    if (mouseY > height / 2 + imgDisplay.h - 35 && mouseY < height / 2 + imgDisplay.h + 45) {
                         scale(1.25, 1.25);
                     }
                 } 
@@ -194,24 +179,46 @@ function displayProfiles() {
                 fill(200);
                 triangle(-50, 0, 50, 40, 50, -40);
             }
-        pop();   
+            pop();   
 
-        push();
-            // forward button
-            translate(width / 2 + 100, height / 2 + h);
-            if (mouseX < width / 2 + 150 && mouseX > width / 2 + 45) {
-                if (mouseY > height / 2 + h - 35 && mouseY < height / 2 + h + 45) {
-                    scale(1.25, 1.25);
+            push();
+                // forward button
+                translate(width / 2 + 100, height / 2 + imgDisplay.h);
+                // hover the forward button
+                if (mouseX < width / 2 + 150 && mouseX > width / 2 + 45) {
+                    if (mouseY > height / 2 + imgDisplay.h - 35 && mouseY < height / 2 + imgDisplay.h + 45) {
+                        scale(1.25, 1.25);
+                    }
                 }
-            }
-            fill(0, 100);
-            triangle(50, 5, -55, 45, -55, -35);
-            fill(200);
-            triangle(50, 0, -50, 40, -50, -40);
-        pop();
-    pop();
+                fill(0, 100);
+                triangle(50, 5, -55, 45, -55, -35);
+                fill(200);
+                triangle(50, 0, -50, 40, -50, -40);
+            pop();
 
-    
+            push();
+                translate(width - 150, height / 2 + imgDisplay.h + 90);
+                if (mouseX < (width - 150) + 100 && mouseX > (width - 150) - 100) {
+                    if (mouseY < (height / 2 + imgDisplay.h + 90) + 25 && mouseY > (height / 2 + imgDisplay.h + 90) - 25) {
+                        scale(1.25, 1.25);
+                        textSize(width / 20);
+                    }
+                }
+                fill(0, 100);
+                rect(0, 0, 220, 70);
+                fill(200);
+                rect(0, 0, 200, 50);
+                fill(10);
+                textSize(width / 50);
+                text("Show Details", 0, 12.5);
+            pop();
+        }
+    pop();
+}
+
+// image gallery class
+function drawImg() {
+    imgDisplay.showImg();
 }
 
 // back to the landing page
@@ -230,15 +237,22 @@ function mousePressed() {
 
     // backward button for image gallery
     if (mouseX > width / 2 - 150 && mouseX < width / 2 - 45) {
-        if (mouseY > height / 2 + h - 35 && mouseY < height / 2 + h + 45) {
+        if (mouseY > height / 2 + imgDisplay.h - 35 && mouseY < height / 2 + imgDisplay.h + 45) {
             moveBackwards = true;
         }
     }
 
     // forward button for image gallery
     if (mouseX < width / 2 + 150 && mouseX > width / 2 + 45) {
-        if (mouseY > height / 2 + h - 35 && mouseY < height / 2 + h + 45) {
+        if (mouseY > height / 2 + imgDisplay.h - 35 && mouseY < height / 2 + imgDisplay.h + 45) {
             moveForwards = true;
+        }
+    }
+
+    // show detail button
+    if (mouseX < (width - 150) + 100 && mouseX > (width - 150) - 100) {
+        if (mouseY < (height / 2 + imgDisplay.h + 90) + 25 && mouseY > (height / 2 + imgDisplay.h + 90) - 25) {
+            visualiseData = true;
         }
     }
 }
