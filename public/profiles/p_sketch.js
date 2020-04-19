@@ -47,7 +47,7 @@ function setup() {
                 susp[j] = storedData[j].suspiciousness; 
                 pass[j] = storedData[j].passiveness; 
                 age[j] = storedData[j].age; 
-                gender[j] = storedData[j].gender; 
+                gender[j] = storedData[j].gender.charAt(0).toUpperCase(); 
                 riskLevel[j] = storedData[j].riskLevel; 
                 // console.log(j);
             }
@@ -100,28 +100,27 @@ function displayProfiles() {
     push();
         translate(width / 15, height / 4);
         // hover the back button
-        if (mouseX > (width / 15 - arrow_w / 2) && mouseX < (width / 15 + arrow_w / 2)) {
-            if (mouseY > (height / 4 - arrow_h / 2) && mouseY < (height / 4 + arrow_h / 2)) {
-                // console.log("HOVERED");
-                fill(0, 20, 255, 10);
-                noStroke();
-                rect(0, 0, arrow_w + 20, arrow_h + 20);
-                scale(1.5, 1.5);
-                push(); // to avoid the scale function for this rectangle
-                    strokeWeight(2.5);
-                    stroke(255, 0, 0, 100);
-                    noFill();
-                    rect(width / 15, -50, width / 8, 50);
-                    noStroke();
-                    fill(200);
-                    rect(width / 15, -50, width / 8, 50);
-                pop();
-                fill(10);
-                textSize(width / 100);
-                text("Back to the landing page", width / 15, -50);
+        // go through the code if visualisaData is false
+        if (!visualiseData) {
+            if (mouseX > (width / 15 - arrow_w / 2) && mouseX < (width / 15 + arrow_w / 2)) {
+                if (mouseY > (height / 4 - arrow_h / 2) && mouseY < (height / 4 + arrow_h / 2)) {
+                    scale(1.5, 1.5);
+                    push(); // to avoid the scale function for this rectangle
+                        strokeWeight(2.5);
+                        stroke(255, 0, 0, 100);
+                        noFill();
+                        rect(width / 15, -50, width / 8, 50);
+                        noStroke();
+                        fill(200);
+                        rect(width / 15, -50, width / 8, 50);
+                    pop();
+                    fill(10);
+                    textSize(width / 100);
+                    text("Back to the landing page", width / 15, -50);
+                }
             }
+            image(left_arrow, 0, 0, arrow_w, arrow_h);
         }
-        image(left_arrow, 0, 0, arrow_w, arrow_h);
     pop();
 
     // push();
@@ -196,6 +195,7 @@ function drawGalleryNavigation() {
                 triangle(50, 0, -50, 40, -50, -40);
             pop();
 
+            // "show details" button
             push();
                 translate(width - 150, height / 2 + imgDisplay.h + 90);
                 if (mouseX < (width - 150) + 100 && mouseX > (width - 150) - 100) {
@@ -228,31 +228,33 @@ function goBack() {
 
 
 function mousePressed() {
-    // go back to the landing page
-    if (mouseX > (width / 15 - arrow_w / 2) && mouseX < (width / 15 + arrow_w / 2)) {
-        if (mouseY > (height / 4 - arrow_h / 2) && mouseY < (height / 4 + arrow_h / 2)) {
-            goBack();
+    if (!visualiseData) {
+        // go back to the landing page
+        if (mouseX > (width / 15 - arrow_w / 2) && mouseX < (width / 15 + arrow_w / 2)) {
+            if (mouseY > (height / 4 - arrow_h / 2) && mouseY < (height / 4 + arrow_h / 2)) {
+                goBack();
+            }
         }
-    }
-
-    // backward button for image gallery
-    if (mouseX > width / 2 - 150 && mouseX < width / 2 - 45) {
-        if (mouseY > height / 2 + imgDisplay.h - 35 && mouseY < height / 2 + imgDisplay.h + 45) {
-            moveBackwards = true;
+    
+        // backward button for image gallery
+        if (mouseX > width / 2 - 150 && mouseX < width / 2 - 45) {
+            if (mouseY > height / 2 + imgDisplay.h - 35 && mouseY < height / 2 + imgDisplay.h + 45) {
+                moveBackwards = true;
+            }
         }
-    }
-
-    // forward button for image gallery
-    if (mouseX < width / 2 + 150 && mouseX > width / 2 + 45) {
-        if (mouseY > height / 2 + imgDisplay.h - 35 && mouseY < height / 2 + imgDisplay.h + 45) {
-            moveForwards = true;
+    
+        // forward button for image gallery
+        if (mouseX < width / 2 + 150 && mouseX > width / 2 + 45) {
+            if (mouseY > height / 2 + imgDisplay.h - 35 && mouseY < height / 2 + imgDisplay.h + 45) {
+                moveForwards = true;
+            }
         }
-    }
-
-    // show detail button
-    if (mouseX < (width - 150) + 100 && mouseX > (width - 150) - 100) {
-        if (mouseY < (height / 2 + imgDisplay.h + 90) + 25 && mouseY > (height / 2 + imgDisplay.h + 90) - 25) {
-            visualiseData = true;
+    
+        // show detail button
+        if (mouseX < (width - 150) + 100 && mouseX > (width - 150) - 100) {
+            if (mouseY < (height / 2 + imgDisplay.h + 90) + 25 && mouseY > (height / 2 + imgDisplay.h + 90) - 25) {
+                visualiseData = true;
+            }
         }
     }
 }
@@ -263,6 +265,10 @@ function keyPressed() {
         gallery_move++;
     } else if (keyCode === LEFT_ARROW) {
         gallery_move--;
+    }
+
+    if (keyCode === ESCAPE) {
+        visualiseData = false;
     }
 }
 
