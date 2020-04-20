@@ -82,7 +82,9 @@ function setup() {
 function draw() {
     background(41, 40, 40);
     if (!loading) displayProfiles();
-    else background(0, 0, 255); // loading animation purpose (HAVEN'T DONE IT)
+    else {
+        background(0, 0, 200, 150); // loading animation purpose (HAVEN'T DONE IT)
+    }
 }
 
 // responsive window resizing

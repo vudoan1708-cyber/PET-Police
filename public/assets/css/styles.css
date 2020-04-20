@@ -26,6 +26,8 @@ html {
   background-color: #090032;
   font-size: 2.5rem;
   color: #c8c8c8;
+  -webkit-box-shadow: 1px 8px 12px 0 #000;
+          box-shadow: 1px 8px 12px 0 #000;
 }
 
 #consent_form #form p {

@@ -5,6 +5,8 @@ const app = express(); // setup express
 const http = require("http");
 const server = http.createServer(app);
 
+const { check, validationResult } = require('express-validator');
+
 const database = new Datastore("database/database.db"); // set up database object and set up the directory to where it will be saved
 database.loadDatabase(); // create a database file
 // const path = require('path'); // path to the logo 
@@ -49,4 +51,23 @@ app.get('/face-api/', (request, response) => {
       return;
     } else response.json(data);
   })
-})
+});
+
+// forms
+app.post('/forms/', [
+  // check for first name input 
+  check('fname')
+    // set min length of input to 1
+    .isLength({ min: 1 })
+], (request, response) => {
+  const user_data = request.body;
+  const err = validationResult(request);
+  // if (!err.isEmpty()) {
+  //   return response.status(422).json({ err: err.array() })
+  // }
+  console.log(user_data);
+  // User.create({
+  //   firstname: request.body.fname
+  //   // password: request.body.password
+  // }).then(user => response.json(user));
+});

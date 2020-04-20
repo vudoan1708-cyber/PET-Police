@@ -14,6 +14,15 @@ const timer = document.getElementById('timer');
 const warningBox = document.createElement("div");
 const visualisation_btn = document.querySelector(".preview");
 
+// pre-modify some HTML elements for the intro section
+countdown.style.display = 'none',
+// nav.style.opacity = 0,
+content_wrapper.style.display = 'none',
+stats.style.display = 'none',
+risk.style.display = 'none',
+visualisation_btn.style.visibility = 'hidden',
+webcam_loading.style.visibility = 'hidden';
+
 // countdown timer
 let timeCountdown = 10; // show the time countdown on screen so users can see it
 
@@ -37,17 +46,8 @@ let imgData = []; // a variable to store JSON image data
 
 let isSubmitted = false;
 
-// load all the necessary models and pre-modify some HTML elements when loading the intro section
+
 Promise.all([
-    // pre-modify some HTML elements for the intro section
-    countdown.style.display = 'none',
-    nav.style.display = 'none',
-    content_wrapper.style.display = 'none',
-    stats.style.display = 'none',
-    risk.style.display = 'none',
-    visualisation_btn.style.visibility = 'hidden',
-    webcam_loading.style.visibility = 'hidden',
-    
     // load all the included models
     faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL),
     faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL),
@@ -58,9 +58,40 @@ Promise.all([
 ]).then(check) 
 
 // check for form validations
-function validationForm() {
-    isSubmitted = true;
+// not working very well atm
+form.addEventListener('submit', e => {
+    let messages = [];
+    if (fname.value === '' || fname.value == null) {
+        messages.push('Name needed');
+        console.log(fname.value);
+    }
+    if (messages.length > 0) {
+        e.preventDefault();
+        return false;
+    } else {
+        postForm(fname.value);
+        isSubmitted = true;
+    }
+})
+
+async function postForm(n) {
+    const data = { n };
+    const options = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    };
+    const form_response = await fetch('/forms/', options);
+    const json = await form_response.json();
+    console.log(json);
 }
+// end of checking form validation
+
+// function validationForm() {
+//     isSubmitted = true;
+// }
 
 // check if the submit button is clicked, 
 // if not, loop this function forever
@@ -71,12 +102,13 @@ function check() {
     } else {
         consent_form.style.display = 'none';
         countdown.style.display = 'block';
-        nav.style.display = 'block';
+        nav.style.opacity = 1;
         content_wrapper.style.display = 'block';
         stats.style.display = 'block';
         risk.style.display = 'block';
         webcam_loading.style.visibility = 'visible';
         startVideo(); // start the video playing
+        console.log(isSubmitted);
     }
 }
 
@@ -320,12 +352,10 @@ async function storeImg() {
 
 function showBtns(b) {
     const button = document.getElementById(b);
-    if (button.style.display === "none") {
-        button.style.display = "block";
+    if (button.style.display === 'none') {
+        button.style.display = 'block';
         // button.style.transition = "display 0.5s";
-    }
-    else button.style.display = "none";
-    console.log("PRESSED");
+    } else button.style.display = 'none';
 }
 
 function clearPicture() {

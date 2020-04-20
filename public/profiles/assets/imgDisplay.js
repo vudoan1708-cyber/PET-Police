@@ -98,7 +98,7 @@ class ImgDisplay {
                     if (!visualiseData) {
                         push();
                             // filter(GRAY);
-                            blendMode(SCREEN);
+                            blendMode(SOFT_LIGHT);
                             image(images[i], this.x, 0, this.w, this.h);
                         pop();
                     }
@@ -190,7 +190,7 @@ class ImgDisplay {
                     if (!visualiseData) {
                         push();
                             // filter(GRAY);
-                            blendMode(SCREEN);
+                            blendMode(SOFT_LIGHT);
                             image(images[i], this.x, 0, this.w, this.h);
                         pop();
                     }
