@@ -3,10 +3,19 @@ const MODEL_URL = 'face-api.js-master/weights';
 // video related elements
 const video = document.getElementById('video');
 const webcam_loading = document.getElementById('webcam_loading');
+const countdown = document.getElementById('countdown');
+const nav = document.getElementById('nav');
+const content_wrapper = document.querySelector('.wrapper');
+const stats = document.getElementById('stats');
+const risk = document.getElementById('risk');
+const consent_form = document.getElementById('consent_form');
+const timer = document.getElementById('timer');
+
+const warningBox = document.createElement("div");
+const visualisation_btn = document.querySelector(".preview");
 
 // countdown timer
 let timeCountdown = 10; // show the time countdown on screen so users can see it
-let timer = document.getElementById('timer');
 
 let gender = "";
 let age = 0;
@@ -26,18 +35,50 @@ let image64 = null; // a variable to store images
 let totalImg = 0; // a variable to keep track of total number of images in the database
 let imgData = []; // a variable to store JSON image data
 
-// load all the included models
+let isSubmitted = false;
+
+// load all the necessary models and pre-modify some HTML elements when loading the intro section
 Promise.all([
+    // pre-modify some HTML elements for the intro section
+    countdown.style.display = 'none',
+    nav.style.display = 'none',
+    content_wrapper.style.display = 'none',
+    stats.style.display = 'none',
+    risk.style.display = 'none',
+    visualisation_btn.style.visibility = 'hidden',
+    webcam_loading.style.visibility = 'hidden',
+    
+    // load all the included models
     faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL),
     faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL),
     faceapi.nets.faceExpressionNet.loadFromUri(MODEL_URL),
     faceapi.nets.ageGenderNet.loadFromUri(MODEL_URL),
-    getImg() // and trigger the getImg() function
-]).then(startVideo) // then start the video playing
+    getImg(), // and trigger the getImg() function
+    
+]).then(check) 
 
-// function setup() {
-//     canvas = createCanvas(window.innerWidth, window.innerHeight).parent('video');;
-// }
+// check for form validations
+function validationForm() {
+    isSubmitted = true;
+}
+
+// check if the submit button is clicked, 
+// if not, loop this function forever
+// if clicked, start the video and do the rest of the code
+function check() {
+    if (!isSubmitted) {
+        setTimeout(check, 100);
+    } else {
+        consent_form.style.display = 'none';
+        countdown.style.display = 'block';
+        nav.style.display = 'block';
+        content_wrapper.style.display = 'block';
+        stats.style.display = 'block';
+        risk.style.display = 'block';
+        webcam_loading.style.visibility = 'visible';
+        startVideo(); // start the video playing
+    }
+}
 
 function startVideo() {
     navigator.getUserMedia(
@@ -179,8 +220,7 @@ video.addEventListener('play', () => {
 //     return totalImg; // return the total number of images to the variable
 // }
 // display warning message
-let warningBox = document.createElement("div");
-let visualisation_btn = document.querySelector(".preview");
+
 warningBox.className = "warning";
 
 

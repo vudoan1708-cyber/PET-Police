@@ -35,6 +35,30 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.9.0/addons/p5.sound.min.js"></script>
     <script defer src="sketch.js"></script>
 
+    <!-- INTRO SECTION -->
+    <div id="consent_form">
+        <div id="form">
+            <!-- <video id="intro_video" width="320" height="180"></video> -->
+            <p>Some texts to be put here (Introduction about the project...)</p>
+            <!-- <form name="user_consent" action="../server.js" method="post"> -->
+            <label for="fname">First Name:</label>
+            <input placeholder="Vu" type="text" id="fname" name="fname"><br><br>
+            <label for="sname">Surname:</label>
+            <input placeholder="Doan" type="text" id="sname" name="sname"><br><br>
+            <label for="age">Age:</label>
+            <input placeholder="20" type="number" id="age" name="age"><br><br>
+
+            <!-- checkbox for agreement to consent user information -->
+            <input type="checkbox" id="agreementCheck" name="agreementCheck">
+            <label for="agreementCheck">I agree to giving out my consent while using this app</label><br><br>
+            <!-- submit button -->
+            <input type="submit" value="Submit" onclick="validationForm()">
+            <!-- </form> -->
+        </div>
+    </div>
+
+
+    <!-- LANDING PAGE -->
     <!-- countdown -->
     <h2 id="countdown">Countdown for A Photo Capture</h2>
     <div id="timer"></div>
@@ -43,7 +67,7 @@
     <nav id="nav">
         <button class="arrow" onclick="showBtns('btn')">Menu</button>
         <!-- buttons -->
-        <div id="btn" style="display: none">
+        <div id="btn">
             <button class="about" onclick="about()">About</button>
             <button class="vis" onclick="displayImg()">Visualisations</button>
         </div>
@@ -55,7 +79,7 @@
         <video id="video" width="720" height="520" autoplay muted></video>
         <!-- <div id="age"></div> -->
     </div>
-    <button class="preview" style="visibility: hidden" onclick="previewImg()">Preview >>></button>
+    <button class="preview" onclick="previewImg()">Preview >>></button>
 
     <div id="stats">
         <h3>DETAILS</h3>

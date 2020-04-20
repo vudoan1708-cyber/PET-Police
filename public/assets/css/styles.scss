@@ -14,6 +14,33 @@ html {
     font-size: 10px;
 }
 
+// INTRO SECTION
+#consent_form {
+    position: absolute;
+    transform: translate(-50%, 50%);
+    top: 0%;
+    left: 50%;
+    background-color: $bg-color;
+    #form {
+        p {
+            padding-bottom: 50px;
+        }
+        margin: 20px;
+        padding: 20px;
+        width: 90%;
+        background-color: $wrapper-color;
+        font-size: 2.5rem;
+        color: $text-color;
+        label {
+            font-size: 2rem;
+        }
+        label[agreementCheck] {
+            font-size: 1.5rem;
+        }
+    }
+}
+
+// LANDING PAGE
 // timer
 h2#countdown {
     position: absolute;
