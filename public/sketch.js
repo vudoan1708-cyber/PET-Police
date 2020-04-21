@@ -1,27 +1,30 @@
 const MODEL_URL = 'face-api.js-master/weights';
 
 // video related elements
-const video = document.getElementById('video');
-const webcam_loading = document.getElementById('webcam_loading');
-const countdown = document.getElementById('countdown');
-const nav = document.getElementById('nav');
-const content_wrapper = document.querySelector('.wrapper');
-const stats = document.getElementById('stats');
-const risk = document.getElementById('risk');
-const consent_form = document.getElementById('consent_form');
-const timer = document.getElementById('timer');
+const video = document.getElementById('video'),
+      webcam_loading = document.getElementById('webcam_loading'),
+      countdown = document.getElementById('countdown'),
+      nav = document.getElementById('nav'),
+      content_wrapper = document.querySelector('.wrapper'),
+      stats = document.getElementById('stats'),
+      risk = document.getElementById('risk'),
+      consent_form = document.getElementById('consent_form'),
+      timer = document.getElementById('timer'),
 
-const warningBox = document.createElement("div");
-const visualisation_btn = document.querySelector(".preview");
+      hidden_canvas = document.getElementById('canvas'),
+      warningBox = document.createElement("div"),
+      visualisation_btn = document.querySelector(".preview");
 
 // pre-modify some HTML elements for the intro section
-countdown.style.display = 'none',
+countdown.style.display = 'none';
 // nav.style.opacity = 0,
-content_wrapper.style.display = 'none',
-stats.style.display = 'none',
-risk.style.display = 'none',
-visualisation_btn.style.visibility = 'hidden',
+content_wrapper.style.display = 'none';
+stats.style.display = 'none';
+risk.style.display = 'none';
+timer.style.display = 'none';
+visualisation_btn.style.visibility = 'hidden';
 webcam_loading.style.visibility = 'hidden';
+hidden_canvas.style.visibility = 'hidden';
 
 // countdown timer
 let timeCountdown = 10; // show the time countdown on screen so users can see it
@@ -57,44 +60,8 @@ Promise.all([
     
 ]).then(check) 
 
-// check for form validations
-// not working very well atm
-form.addEventListener('submit', e => {
-    let messages = [];
-    if (fname.value === '' || fname.value == null) {
-        messages.push('Name needed');
-        console.log(fname.value);
-    }
-    if (messages.length > 0) {
-        e.preventDefault();
-        return false;
-    } else {
-        postForm(fname.value);
-        isSubmitted = true;
-    }
-})
-
-async function postForm(n) {
-    const data = { n };
-    const options = {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
-    };
-    const form_response = await fetch('/forms/', options);
-    const json = await form_response.json();
-    console.log(json);
-}
-// end of checking form validation
-
-// function validationForm() {
-//     isSubmitted = true;
-// }
-
 // check if the submit button is clicked, 
-// if not, loop this function forever
+// if not, loop this function forever (keep the page at the consent form section)
 // if clicked, start the video and do the rest of the code
 function check() {
     if (!isSubmitted) {
@@ -102,15 +69,87 @@ function check() {
     } else {
         consent_form.style.display = 'none';
         countdown.style.display = 'block';
-        nav.style.opacity = 1;
+        // nav.style.opacity = 1;
         content_wrapper.style.display = 'block';
         stats.style.display = 'block';
         risk.style.display = 'block';
         webcam_loading.style.visibility = 'visible';
+        hidden_canvas.style.visibility = 'visible';
+
         startVideo(); // start the video playing
-        console.log(isSubmitted);
     }
 }
+
+// check for form validations
+// not working very well atm
+// form.addEventListener('submit', e => {
+//     let messages = [];
+//     if (fname.value === '' || fname.value == null) {
+//         messages.push('Name needed');
+//         console.log(fname.value);
+//     }
+//     if (messages.length > 0) {
+//         e.preventDefault();
+//         return false;
+//     } else {
+//         postForm(fname.value);
+//         isSubmitted = true;
+//     }
+// })
+
+// posting users' data to another database
+// async function postForm(name, age) {
+//     const data = { name, age };
+//     const options = {
+//         method: 'POST',
+//         headers: {
+//             'Content-Type': 'application/json'
+//         },
+//         body: JSON.stringify(data)
+//     };
+//     const form_response = await fetch('/forms/', options);
+//     const json = await form_response.json();
+//     console.log(json);
+// }
+// end of checking form validation
+
+
+const showMessage = document.createElement("div");
+
+function validationForm() {
+    let messages = [];
+    showMessage.style.display = 'none';
+    // error handling straight from the client without using express-validator from the server side
+    // if the box is uncheck
+    if (!agreementCheck.checked) {
+        messages.push('Please check this box to proceed!');
+        // style the warning message
+        showMessage.style.position = 'absolute';
+        showMessage.style.left = '10%';
+        showMessage.style.bottom = '10%';
+        showMessage.style.display = 'inline-block';
+        showMessage.style.color = 'red';
+        showMessage.style.border = 'solid';
+        showMessage.style.fontSize = '1.25rem';
+        showMessage.innerHTML = messages;
+        agreementCheck.parentNode.insertBefore(showMessage, agreementCheck.nextSibling); // add a warning message above the check box
+    }
+    
+
+    if (messages.length > 0) {
+        // e.preventDefault();
+        // clear the warning message after 2 secs
+        setTimeout(() => {
+            showMessage.parentNode.removeChild(showMessage);
+        }, 2000);
+        return false;
+    } else {
+        // console.log(fname.value);
+        // postForm(fname.value, u_age.value).then(() => { isSubmitted = true; })
+        isSubmitted = true;
+    }
+}
+
 
 function startVideo() {
     navigator.getUserMedia(
@@ -126,6 +165,7 @@ video.addEventListener('play', () => {
     setInterval(() => {
         // countdown timer
         // show the users the timer before a photo capture
+        timer.style.display = 'block';
         if (timeCountdown > 0) { // if the time is still larger than 0
             timer.innerHTML = timeCountdown + ' second(s)';
         }
@@ -134,7 +174,6 @@ video.addEventListener('play', () => {
     
     webcam_loading.style.visibility = 'hidden'; // get rid of the text when webcam is loaded
 
-    const hidden_canvas = document.getElementById('canvas');
     const canvas = faceapi.createCanvasFromMedia(video); // create a canvas 
     const context = canvas.getContext('2d');
     document.body.append(canvas); // append the canvas to the body of the page
@@ -229,30 +268,15 @@ video.addEventListener('play', () => {
                             // triggers the async function after 10 secs since opening the webpage
                             storeImg();
                         }
-                        
-                        
-                        // console.log("CAPTURED");
-                        // return;
-    
                     }, 10000)// wait for 10 secs to invoke the above function
                 }); // end of promise
                 
-                
-                // document.body.removeChild(newDiv);
-                // gender = "";
-                // newDiv.clear();
-                // canvas.getContext('2d').clearRect(canvas.width / 2, canvas.height / 2, );
-                // newDiv.innerHTML = "";
             }
     }, 100) // every 100ms, await the face API
 })
 
-// async function getImg() { 
-    
-//     return totalImg; // return the total number of images to the variable
-// }
 // display warning message
-
+// if there is no data in the database, show this message when users try to click on the visualisations button
 warningBox.className = "warning";
 
 
@@ -296,7 +320,8 @@ async function previewImg() {
     const photo = document.createElement('img');
     photo.className = "one_img";
     // preview the most recent photo capture
-    photo.setAttribute('src', imgData[imgData.length - 1].image64);
+    // index is 0 because the sorting in the database is arranging images in the order of the latest to the oldest
+    photo.setAttribute('src', imgData[0].image64);
     document.body.appendChild(photo);
 }
 
@@ -356,16 +381,6 @@ function showBtns(b) {
         button.style.display = 'block';
         // button.style.transition = "display 0.5s";
     } else button.style.display = 'none';
-}
-
-function clearPicture() {
-    const hidden_canvas = document.getElementById('canvas');
-    const ctx = hidden_canvas.getContext('2d');
-    ctx.fillStyle = "#AAA";
-    ctx.fillRect(0, 0, hidden_canvas.width, hidden_canvas.height);
-
-    let data = hidden_canvas.toDataURL('image/png');
-    photo.setAttribute('src', data);
 }
 
 function drawAggr() {

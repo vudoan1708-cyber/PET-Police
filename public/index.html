@@ -38,59 +38,79 @@
     <!-- INTRO SECTION -->
     <div id="consent_form">
         <div id="form">
-            <!-- <video id="intro_video" width="320" height="180"></video> -->
-            <p>Some texts to be put here (Introduction about the project...)</p>
-            <form name="user_consent" action="/forms/" method="post" onsubmit="submitBtn.disabled = true; return true;">
-            <div class="input-container">
-                <label for="fname">First Name *</label>
-                <input placeholder="Vu" type="text" id="fname" name="fname" required><br><br>
+            <div id="intro_video">
+                <iframe src="https://www.youtube.com/embed/tgbNymZ7vqY" allowfullscreen webkitAllowFullScreen mozAllowfullscreen></iframe>
             </div>
-            
-            <div class="input-container">
-                <label for="sname">Surname</label>
-                <input placeholder="Doan" type="text" id="sname" name="sname"><br><br>
-            </div>
-            
-            <div class="input-container">
-                <label for="age">Age *</label>
-                <input placeholder="20" type="number" id="age" name="age" required><br><br>
-            </div>
-            
+            <h3 id="consent_title">An Immitation of AI Profiling System</h3>
+            <p>This is a group project about <b>FACIAL RECOGNITION</b> social experiment tool that analyses the faces of the  user, 
+                collecting data about them to determine how the government use the information. The concept of this tool is to make the user 
+                a subject of the experience, exploring the subject of information and control through demostration of the amount data being 
+                collect by the user, how little say the user has on how much data is capture, and the consequences of using it in public.</p>
+            <!-- <form name="user_consent" action="/forms/" method="post" onsubmit="submitBtn.disabled = true; return true;"> -->
+                <!-- <h3>Your Personal Details</h3>
+                <div class="input-container">
+                    <label for="titles">Titles</label>
+                    <select id="titles" name="titles">
+                        <option value="Mr">Mr</option>
+                        <option value="Mrs">Mrs</option>
+                        <option value="Miss">Miss</option>
+                        <option value="Ms">Ms</option>
+                        <option value="Dr">Dr</option>
+                    </select>
+                </div>
 
-            <!-- checkbox for agreement to consent user information -->
-            <input type="checkbox" id="agreementCheck" name="agreementCheck" required> 
-            <label for="agreementCheck">I agree to giving out my consent while using this app</label><br><br>
-            <!-- submit button -->
-            <input type="submit" name="submitBtn" value="Submit" id="submit">
-            </form>
+                <div class="input-container">
+                    <label for="fname">Your First Name *</label>
+                    <input placeholder="Vu" type="text" id="fname" name="fname" required><br><br>
+                </div>
+
+                <div class="input-container">
+                    <label for="sname">Your Surname</label>
+                    <input placeholder="Doan" type="text" id="sname" name="sname"><br><br>
+                </div>
+                
+                <div class="input-container">
+                    <label for="u_age">Age *</label>
+                    <input placeholder="20" type="number" id="u_age" name="u_age" required><br><br>
+                </div> -->
+                
+
+                <!-- checkbox for agreement to consent user information -->
+                <input type="checkbox" id="agreementCheck" name="agreementCheck" required> 
+                <label for="agreementCheck" style="font-size: 1.5rem">I have read the above detailed decriptions of the project, understand its purposes 
+                                                                    and agree to giving out my consent while using this app</label><br><br>
+                <!-- submit button -->
+                <input type="submit" name="submitBtn" value="Submit" id="submit" onclick="validationForm()">
+            <!-- </form> -->
         </div>
     </div>
+
+    
 
 
     <!-- LANDING PAGE -->
     <!-- countdown -->
-    <h2 id="countdown">Countdown for A Photo Capture</h2>
-    <div id="timer"></div>
+    <h2 id="countdown" style="display: none">Countdown for A Photo Capture</h2>
+    <div id="timer" style="display: none"></div>
 
     <!-- navigation -->
     <nav id="nav">
         <button class="arrow" onclick="showBtns('btn')">Menu</button>
         <!-- buttons -->
         <div id="btn" style="display: none">
-            <button class="about" onclick="about()">About</button>
             <button class="vis" onclick="displayImg()">Visualisations</button>
         </div>
     </nav>
     
     <!-- main content -->
     <div class="wrapper">
-        <h2 id="webcam_loading">WEBCAM LOADING...</h2>
+        <h2 id="webcam_loading" style="display: none">WEBCAM LOADING...</h2>
         <video id="video" width="720" height="520" autoplay muted></video>
         <!-- <div id="age"></div> -->
     </div>
-    <button class="preview" onclick="previewImg()">Preview >>></button>
+    <button class="preview" style="visibility: hidden" onclick="previewImg()">Preview >>></button>
 
-    <div id="stats">
+    <div id="stats" style="display: none">
         <h3>DETAILS</h3>
         <p id="gender"></p>
         <p id="age"></p>
