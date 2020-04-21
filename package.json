@@ -1,0 +1,32 @@
+{
+  "name": "p-e-tpolice",
+  "version": "1.0.0",
+  "description": "Creating with Data project (Face-api.js)",
+  "main": "server.js",
+  "dependencies": {
+    "express": "^4.17.1",
+    "express-validator": "^6.4.0",
+    "nedb": "^1.8.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vudoan1708-cyber/Creating-With-Data.git"
+  },
+  "keywords": [
+    "profiling",
+    "face-api",
+    "data",
+    "visualisations"
+  ],
+  "author": "Vu Doan, Quince Gore-Rodney, Callum Howard",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/vudoan1708-cyber/Creating-With-Data/issues"
+  },
+  "homepage": "https://github.com/vudoan1708-cyber/Creating-With-Data#readme"
+}
