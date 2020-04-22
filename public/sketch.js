@@ -49,6 +49,35 @@ let imgData = []; // a variable to store JSON image data
 
 let isSubmitted = false;
 
+// FOR EDGE COMPATIBIBLITY WITH FACE-API.JS
+TextEncoder = function TextEncoder() {
+
+}
+
+TextEncoder.prototype.encode = function(s) {
+    const e = new Uint8Array(s.length);
+
+    for (let i = 0; i < s.length; i += 1) {
+        e[i] = s.charCodeAt(i);
+    }
+
+    return e;
+}
+
+TextDecoder = function TextDecoder() {
+    
+}
+
+TextDecoder.prototype.decode = function(arr) {
+    let d = "";
+
+    for (let i = 0; i < arr.length; i += 1) {
+        d += String.fromCharCode(arr[i]);
+    }
+
+    return d;
+} 
+// FOR EDGE COMPATIBILITY WITH FACE-API.JS
 
 Promise.all([
     // load all the included models
