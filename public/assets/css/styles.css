@@ -8,19 +8,19 @@
 html {
   background-color: #292828;
   font-size: 10px;
+  overflow-x: hidden;
 }
 
 #consent_form {
   position: absolute;
-  -webkit-transform: translate(-50%, 50%);
-          transform: translate(-50%, 50%);
-  top: -25%;
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
+  top: 0%;
   left: 50%;
   background-color: #292828;
 }
 
 #consent_form #form {
-  margin: 20px;
   padding: 20px;
   width: 100%;
   background-color: #090032;
@@ -31,15 +31,17 @@ html {
 }
 
 #consent_form #form #intro_video {
-  overflow: hidden;
+  position: relative;
+  padding-bottom: 56.25%;
+  padding-top: 35px;
   height: 0;
-  margin: 0 auto;
-  max-width: 80%;
-  height: auto;
+  overflow: hidden;
 }
 
 #consent_form #form #intro_video iframe {
+  position: absolute;
   top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
 }
