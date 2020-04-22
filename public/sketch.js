@@ -125,9 +125,10 @@ function validationForm() {
         messages.push('Please check this box to proceed!');
         // style the warning message
         showMessage.style.position = 'absolute';
-        showMessage.style.left = '10%';
+        showMessage.style.left = '15%';
         showMessage.style.bottom = '10%';
         showMessage.style.display = 'inline-block';
+        showMessage.style.padding = '3px';
         showMessage.style.color = 'red';
         showMessage.style.border = 'solid';
         showMessage.style.fontSize = '1.25rem';
