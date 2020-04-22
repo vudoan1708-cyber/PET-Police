@@ -15,12 +15,13 @@ html {
   position: absolute;
   -webkit-transform: translateX(-50%);
           transform: translateX(-50%);
-  top: 0%;
+  top: 20%;
   left: 50%;
   background-color: #292828;
 }
 
 #consent_form #form {
+  margin: 20px;
   padding: 20px;
   width: 100%;
   background-color: #090032;
@@ -108,7 +109,7 @@ h2#countdown, #timer {
 }
 
 #nav {
-  position: absolute;
+  position: fixed;
   right: 0;
   top: 50%;
 }
@@ -122,10 +123,9 @@ h2#countdown, #timer {
 
 #nav #btn {
   position: relative;
-  right: 0;
 }
 
-#nav #btn .about, #nav #btn .vis {
+#nav #btn .vis {
   display: block;
   padding: 2.5rem;
   font-size: 2rem;

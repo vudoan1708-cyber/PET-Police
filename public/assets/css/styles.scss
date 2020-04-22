@@ -19,7 +19,7 @@ html {
 #consent_form {
     position: absolute;
     transform: translateX(-50%);
-    top: 0%;
+    top: 20%;
     left: 50%;
     background-color: $bg-color;
     #form {
@@ -47,7 +47,7 @@ html {
             font-size: 1.75rem;
             line-height: 1.5;
         }
-        // margin: 20px;
+        margin: 20px;
         padding: 20px;
         width: 100%;
         background-color: $wrapper-color;
@@ -109,7 +109,7 @@ h2#countdown {
 
 // navigation
 #nav {
-    position: absolute;
+    position: fixed;
     right: 0;
     top: 50%;
     .arrow {
@@ -120,10 +120,9 @@ h2#countdown {
     }
     #btn {
         position: relative;
-        right: 0;
-        .about, .vis {
+        // right: 0;
+        .vis {
             display: block;
-            // right: 0;
             padding: 2.5rem;
             font-size: 2rem;
             background-color: $info-color;
