@@ -6,134 +6,151 @@ $text-color: rgb(200, 200, 200);
 * {
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
-}
-
-html {
-    background-color: $bg-color;
+    -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+  }
+  
+  html {
+    background-color: #292828;
     font-size: 10px;
-    overflow-x: hidden; // get rid of horizontal scroll bar
-}
-
-// INTRO SECTION
-#consent_form {
+    overflow-x: hidden;
+  }
+  
+  #consent_form {
     position: absolute;
-    transform: translateX(-50%);
+    -webkit-transform: translateX(-50%);
+            transform: translateX(-50%);
     top: 20%;
     left: 50%;
-    background-color: $bg-color;
-    #form {
-        #intro_video {
-            position: relative;
-            padding-bottom: 56.25%;
-            padding-top: 35px;
-            height: 0;
-            overflow: hidden;
-            iframe {
-                position: absolute;
-                top:0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-            }
-        }
-        h3#consent_title {
-            margin: 0 auto;
-            padding: 20px;
-            text-align: center;
-        }
-        p {
-            padding: 20px 0;
-            font-size: 1.75rem;
-            line-height: 1.5;
-        }
-        margin: 20px;
-        padding: 20px;
-        width: 100%;
-        background-color: $wrapper-color;
-        font-size: 2.5rem;
-        color: $text-color;
-        box-shadow: 1px 8px 12px 0 #000;
-        label {
-            font-size: 2rem;
-        }
-
-        // Full-width input fields
-        input[type=text] {
-            width: 30%;
-            padding: 10px;
-            margin: 5px 0 5px 0;
-            display: inline-block;
-            border: none;
-            background: #f1f1f1;
-        }
-        input[type=number] {
-            @extend input[type=text];
-            width: 10%;
-        }
-        input[type=submit] {
-            position: relative;
-            left: 45%;
-            padding: 10px;
-            
-        }
-        input[type=text]:focus, input[type=submit]:focus {
-            background-color: #ddd;
-            outline: none;
-        }
-    }
-}
-
-// ABOUT YOU
-#about_wrapper {
-    transform: transform(-50%, 50%);
+    background-color: #292828;
+  }
+  
+  #consent_form #form {
+    margin: 20px;
+    padding: 20px;
+    width: 100%;
+    background-color: #090032;
+    font-size: 2.5rem;
+    color: #c8c8c8;
+    -webkit-box-shadow: 1px 8px 12px 0 #000;
+            box-shadow: 1px 8px 12px 0 #000;
+  }
+  
+  #consent_form #form #intro_video {
+    position: relative;
+    padding-bottom: 56.25%;
+    padding-top: 35px;
+    height: 0;
+    overflow: hidden;
+  }
+  
+  #consent_form #form #intro_video iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+  
+  #consent_form #form h3#consent_title {
+    margin: 0 auto;
+    padding: 20px;
+    text-align: center;
+  }
+  
+  #consent_form #form p {
+    padding: 20px 0;
+    font-size: 1.75rem;
+    line-height: 1.5;
+  }
+  
+  #consent_form #form label {
+    font-size: 2rem;
+  }
+  
+  #consent_form #form input[type=text], #consent_form #form input[type=number] {
+    width: 30%;
+    padding: 10px;
+    margin: 5px 0 5px 0;
+    display: inline-block;
+    border: none;
+    background: #f1f1f1;
+  }
+  
+  #consent_form #form input[type=number] {
+    width: 10%;
+  }
+  
+  #consent_form #form input[type=submit] {
+    position: relative;
+    left: 45%;
+    padding: 10px;
+  }
+  
+  #consent_form #form input[type=text]:focus, #consent_form #form input:focus[type=number], #consent_form #form input[type=submit]:focus {
+    background-color: #ddd;
+    outline: none;
+  }
+  
+  #about_wrapper {
+    -webkit-transform: transform(-50%, 50%);
+            transform: transform(-50%, 50%);
     top: 0;
     width: 50%;
     height: 50%;
-    background-color: rgb(255, 255, 255);
-}
-
-// LANDING PAGE
-// timer
-h2#countdown {
+    background-color: white;
+  }
+  
+  h2#countdown, #timer {
     position: absolute;
     left: 40%;
     top: 5%;
-    color: $text-color;
+    color: #c8c8c8;
     font-size: 2.75rem;
-}
-#timer {
-    @extend h2#countdown; // inherit the styling of h2#countdown
+  }
+  
+  #timer {
     top: 10%;
-}
-
-// navigation
-#nav {
+  }
+  
+  #nav {
     position: fixed;
     right: 0;
     top: 50%;
-    .arrow {
-        position: relative;
-        padding: 2rem;
-        background-color: $wrapper-color;
-        color: $text-color;
-    }
-    #btn {
-        position: relative;
-        // right: 0;
-        .vis {
-            display: block;
-            padding: 2.5rem;
-            font-size: 2rem;
-            background-color: $info-color;
-            color: $text-color;
-        }
-    }
-    
-}
-
-//warning box 
-.warning {
+  }
+  
+  #nav .arrow {
+    position: relative;
+    padding: 2rem;
+    background-color: #090032;
+    color: #c8c8c8;
+    border: none;
+    transition: 0.5s;
+  }
+  #nav .arrow:hover {
+  /*   border: solid white; */
+    background-color: rgb(100, 100, 200);
+  }
+  
+  #nav #btn {
+    position: relative;
+  }
+  
+  #nav #btn .vis {
+    display: block;
+    padding: 2.5rem;
+    font-size: 2rem;
+    background-color: black;
+    color: #c8c8c8;
+    border: none;
+  }
+  
+  #nav #btn .vis:hover {
+    transition: 0.5s;
+    background-color: rgb(100, 100, 200);
+  }
+  
+  .warning {
     position: absolute;
     right: 0;
     bottom: 0;
@@ -143,114 +160,106 @@ h2#countdown {
     background-color: #fbd8d4;
     color: #3b3c40;
     font-size: 1.25rem;
-}
-
-// data
-#stats {
+  }
+  
+  #stats {
     position: absolute;
     padding: 20px;
     top: 0;
     left: 0;
     min-height: 100vh;
     min-width: 10%;
-    background-color: $info-color;
-    h3 {
-        position: relative;
-        margin-top: 20rem;
-        font-size: 2rem;
-        color: $text-color;
-    }
-    #gender, #age, #aggressiveness, #suspiciousness, #passiveness {
-        position: relative;
-        padding: 10px;
-        // text-align: center;
-        font-size: 1.75rem;
-    }
-}
-
-// webcam wrapper
-.wrapper {
-    background-color: $wrapper-color;
-    // #video {
-    //     width: 720px;
-    //     height: 520px;
-    // }
-    h2 {
-        visibility: visible;
-        position: absolute;
-        margin: 0 auto;
-        top : 50%;
-        // left: 25%;
-        color: $text-color;
-        font-weight: 2rem;
-        font-size: 5rem;
-    }
-}
-
-//preview button 
-.preview {
+    background-color: black;
+  }
+  
+  #stats h3 {
+    position: relative;
+    margin-top: 20rem;
+    font-size: 2rem;
+    color: #c8c8c8;
+  }
+  
+  #stats #gender, #stats #age, #stats #aggressiveness, #stats #suspiciousness, #stats #passiveness {
+    position: relative;
+    padding: 10px;
+    font-size: 1.75rem;
+  }
+  
+  .wrapper {
+    background-color: #090032;
+  }
+  
+  .wrapper h2 {
+    visibility: visible;
+    position: absolute;
+    margin: 0 auto;
+    top: 50%;
+    color: #c8c8c8;
+    font-weight: 2rem;
+    font-size: 5rem;
+  }
+  
+  .preview {
     position: absolute;
     bottom: 0;
     padding: 3rem;
     font-size: 2rem;
-    background-color: $info-color;
-    color: $text-color;
+    background-color: black;
+    color: #c8c8c8;
     border-radius: 2px;
-}
-
-#risk {
+  }
+  
+  #risk {
     bottom: 0;
     text-align: center;
     font-size: 6rem;
-}
-
-img#logo {
+  }
+  
+  img#logo {
     position: absolute;
     top: 0;
     right: 0;
     width: 20%;
-}
-
-// database
-// put the captured img at the bottom right of the canvas
-
-.one_img {
+  }
+  
+  .one_img {
     position: absolute;
     right: 0 !important;
     bottom: 0 !important;
     width: 200px;
-}
-
-// responsive design
-// extra small device
-@media only screen and (max-width: 600px) {
+  }
+  
+  @media only screen and (max-width: 600px) {
     html {
-        font-size: 1vw;
+      font-size: 1vw;
     }
   }
+  
   /* Small devices (portrait tablets and large phones, 600px and up) */
-@media only screen and (min-width: 600px) {
+  @media only screen and (min-width: 600px) {
     html {
-        font-size: 0.9vw;
+      font-size: 0.9vw;
     }
   }
+  
   /* Medium devices (landscape tablets, 768px and up) */
-@media only screen and (min-width: 768px) {
+  @media only screen and (min-width: 768px) {
     html {
-        font-size: 0.8vw;
+      font-size: 0.8vw;
     }
-  } 
+  }
   
   /* Large devices (laptops/desktops, 992px and up) */
   @media only screen and (min-width: 992px) {
     html {
-        font-size: 0.75vw;
+      font-size: 0.75vw;
     }
-  } 
+  }
   
   /* Extra large devices (large laptops and desktops, 1200px and up) */
   @media only screen and (min-width: 1200px) {
     html {
-        font-size: 0.65vw;
+      font-size: 0.65vw;
     }
   }
+  /*# sourceMappingURL=styles.css.map */

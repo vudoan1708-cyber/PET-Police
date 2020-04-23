@@ -2,7 +2,7 @@
   margin: 0;
   padding: 0;
   -webkit-box-sizing: border-box;
-          box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 html {
@@ -14,7 +14,7 @@ html {
 #consent_form {
   position: absolute;
   -webkit-transform: translateX(-50%);
-          transform: translateX(-50%);
+  transform: translateX(-50%);
   top: 20%;
   left: 50%;
   background-color: #292828;
@@ -28,7 +28,7 @@ html {
   font-size: 2.5rem;
   color: #c8c8c8;
   -webkit-box-shadow: 1px 8px 12px 0 #000;
-          box-shadow: 1px 8px 12px 0 #000;
+  box-shadow: 1px 8px 12px 0 #000;
 }
 
 #consent_form #form #intro_video {
@@ -89,7 +89,7 @@ html {
 
 #about_wrapper {
   -webkit-transform: transform(-50%, 50%);
-          transform: transform(-50%, 50%);
+  transform: transform(-50%, 50%);
   top: 0;
   width: 50%;
   height: 50%;
@@ -119,6 +119,14 @@ h2#countdown, #timer {
   padding: 2rem;
   background-color: #090032;
   color: #c8c8c8;
+  border: none;
+  -webkit-transition: 0.5s;
+  transition: 0.5s;
+}
+
+#nav .arrow:hover {
+  /*   border: solid white; */
+  background-color: #6464c8;
 }
 
 #nav #btn {
@@ -131,6 +139,13 @@ h2#countdown, #timer {
   font-size: 2rem;
   background-color: black;
   color: #c8c8c8;
+  border: none;
+}
+
+#nav #btn .vis:hover {
+  -webkit-transition: 0.5s;
+  transition: 0.5s;
+  background-color: #6464c8;
 }
 
 .warning {

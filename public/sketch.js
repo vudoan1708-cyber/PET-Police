@@ -14,6 +14,7 @@ const video = document.getElementById('video'),
       hidden_canvas = document.getElementById('canvas'),
       warningBox = document.createElement("div"),
       visualisation_btn = document.querySelector(".preview");
+      arrowBtn = document.querySelector('.arrow');
 
 // pre-modify some HTML elements for the intro section
 countdown.style.display = 'none';
@@ -49,35 +50,35 @@ let imgData = []; // a variable to store JSON image data
 
 let isSubmitted = false;
 
-// FOR EDGE COMPATIBIBLITY WITH FACE-API.JS
+// FOR EDGE
 TextEncoder = function TextEncoder() {
 
-}
+		}
 
-TextEncoder.prototype.encode = function(s) {
-    const e = new Uint8Array(s.length);
+		TextEncoder.prototype.encode = function(s) {
+			const e = new Uint8Array(s.length);
 
-    for (let i = 0; i < s.length; i += 1) {
-        e[i] = s.charCodeAt(i);
-    }
+			for (let i = 0; i < s.length; i += 1) {
+				e[i] = s.charCodeAt(i);
+			}
 
-    return e;
-}
+			return e;
+		}
 
-TextDecoder = function TextDecoder() {
-    
-}
+		TextDecoder = function TextDecoder() {
+			
+		}
 
-TextDecoder.prototype.decode = function(arr) {
-    let d = "";
+		TextDecoder.prototype.decode = function(arr) {
+			let d = "";
 
-    for (let i = 0; i < arr.length; i += 1) {
-        d += String.fromCharCode(arr[i]);
-    }
+			for (let i = 0; i < arr.length; i += 1) {
+				d += String.fromCharCode(arr[i]);
+			}
 
-    return d;
-} 
-// FOR EDGE COMPATIBILITY WITH FACE-API.JS
+			return d;
+		} 
+// FOR EDGE
 
 Promise.all([
     // load all the included models
@@ -157,7 +158,6 @@ function validationForm() {
         showMessage.style.left = '15%';
         showMessage.style.bottom = '10%';
         showMessage.style.display = 'inline-block';
-        showMessage.style.padding = '3px';
         showMessage.style.color = 'red';
         showMessage.style.border = 'solid';
         showMessage.style.fontSize = '1.25rem';
@@ -409,8 +409,12 @@ function showBtns(b) {
     const button = document.getElementById(b);
     if (button.style.display === 'none') {
         button.style.display = 'block';
+        arrowBtn.textContent = '>>>';
         // button.style.transition = "display 0.5s";
-    } else button.style.display = 'none';
+    } else {
+      button.style.display = 'none';
+      arrowBtn.textContent = '<<<';
+    }
 }
 
 function drawAggr() {
