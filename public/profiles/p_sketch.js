@@ -25,7 +25,8 @@ let loadingCounter = 0;
 // booleans
 let moveBackwards = false,
     moveForwards =  false,
-    visualiseData = false;
+    visualiseData = false,
+    errorCatched = false;
 
 // class(es)
 let imgDisplay;
@@ -35,6 +36,9 @@ let gallery_move = 1;
 
 // assets : images
 let left_arrow;
+
+// loading animation
+let a = 0;
 
 function MediaLoader(media) {
     loadingCounter++;
@@ -72,6 +76,7 @@ function setup() {
         // .then(MediaLoader()) // trigger MediaLoader() function 
         .catch(err => {
             console.log(err);
+            errorCatched = true;
         });
 
     rectMode(CENTER);
@@ -85,8 +90,30 @@ function setup() {
 function draw() {
     background(41, 40, 40);
     if (!loading) displayProfiles();
+    else if (errorCatched) {
+        textSize(width / 40);
+        fill(255, 0, 0);
+        text('Error while loading database' + '\n' + 'Please try refreshing the page', width / 2, height / 2);
+    }
     else {
-        background(0, 0, 200, 150); // loading animation purpose (HAVEN'T DONE IT)
+        background(41, 40, 40, 150); // loading animation purpose (HAVEN'T DONE IT)
+        
+        push();
+            fill(0, 0, 200, 200);
+            beginShape();
+                let dx = cos(a) * 100;
+                let dy = sin(a) * 100;
+                ellipse(width / 2 + dx, height / 2 + dy, 20);
+        
+                if (a < 360) {
+                
+                a += 0.1;
+                } else a = 0;
+            endShape(CLOSE);
+            textSize(width / 60);
+            fill(255, 0, 0);
+            text('Loading...', width / 2, height / 2);
+        pop();
     }
 }
 
