@@ -13,7 +13,9 @@ database.loadDatabase(); // create a database file
 // user_database.loadDatabase();
 // const path = require('path'); // path to the logo 
 
-server.listen(port, () => console.log("listening"));
+server.listen(port, () => {
+  console.log(`Listening on port: ${port}`);
+});
 app.use(express.static("public")); // setup root directory for client side
 app.use(express.json({ limit: "100mb" })) // set limit for data transfer
 // app.use('/images', express.static(path.join('assets/police_logo.svg', 'images')))

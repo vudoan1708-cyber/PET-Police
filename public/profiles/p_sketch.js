@@ -329,6 +329,5 @@ function keyPressed() {
 async function retrieveData() {
     const old_data = await fetch('/face-api/');
     storedData = await old_data.json();
-    console.log(storedData);
     return storedData;
 }

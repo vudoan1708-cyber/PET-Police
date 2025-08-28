@@ -8,9 +8,12 @@
     "express-validator": "^6.4.0",
     "nedb": "^1.8.0"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "concurrently": "^9.2.1",
+    "nodemon": "^3.1.10"
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "concurrently --kill-others \"nodemon server.js\" \"npx sass --watch public/assets/css/styles.scss public/assets/css/styles.css\"",
     "start": "node server.js"
   },
   "repository": {

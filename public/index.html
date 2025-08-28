@@ -11,7 +11,6 @@
             margin: 0;
             padding: 0;
             width: 100vw;
-            height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -77,9 +76,10 @@
                 
 
                 <!-- checkbox for agreement to consent user information -->
-                <input type="checkbox" id="agreementCheck" name="agreementCheck" required> 
-                <label for="agreementCheck" style="font-size: 1.5rem">I have read the above detailed decriptions of the project, understand its purposes 
-                                                                    and agree to giving out my consent while using this app</label><br><br>
+                <label for="agreementCheck" id="agreementCheckLabel" style="font-size: 1.5rem">
+                    <input type="checkbox" id="agreementCheck" name="agreementCheck" required> 
+                        I have read the above detailed decriptions of the project, understand its purposes and agree to giving out my consent while using this 
+                </label>
                 <!-- submit button -->
                 <input type="submit" name="submitBtn" value="Submit" id="submit" onclick="validationForm()">
             <!-- </form> -->
@@ -90,26 +90,25 @@
 
 
     <!-- LANDING PAGE -->
-    <!-- countdown -->
-    <h2 id="countdown" style="display: none">Countdown for A Photo Capture</h2>
-    <div id="timer" style="display: none"></div>
-
     <!-- navigation -->
     <nav id="nav">
-        <button class="arrow" onclick="showBtns('btn')"><<<</button>
-        <!-- buttons -->
-        <div id="btn" style="display: none">
-            <button class="vis" onclick="displayImg()">Profiles</button>
-        </div>
+        <img id="logo" src="assets/logo/police_logo.svg" alt="PET Police logo">
+        <ul>
+            <li class="vis" onclick="displayImg()">Profiles</li>
+        </ul>
     </nav>
     
     <!-- main content -->
     <div class="wrapper">
+
+        <!-- countdown -->
+        <h2 id="countdown" style="display: none">Countdown for A Photo Capture</h2>
+        <div id="timer" style="display: none"></div>
         <h2 id="webcam_loading" style="display: none">WEBCAM LOADING...</h2>
         <video id="video" width="720" height="520" autoplay muted></video>
         <!-- <div id="age"></div> -->
+        <button class="preview" style="visibility: hidden" onclick="previewImg()">Preview</button>
     </div>
-    <button class="preview" style="visibility: hidden" onclick="previewImg()">Preview >>></button>
 
     <div id="stats" style="display: none">
         <h3>DETAILS</h3>
@@ -118,10 +117,8 @@
         <p id="aggressiveness"></p>
         <p id="suspiciousness"></p>
         <p id="passiveness"></p>
+        <div id="risk"></div>
     </div>
-    <div id="risk"></div>
-    <img id="logo" src="assets/logo/police_logo.svg" alt="a logo">
-    
 
     <!-- captured img -->
     <canvas id="canvas"></canvas>

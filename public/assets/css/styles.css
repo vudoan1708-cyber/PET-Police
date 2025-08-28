@@ -7,21 +7,20 @@
 
 html {
   background-color: #292828;
-  font-size: 10px;
+  font-size: 12px;
   overflow-x: hidden;
 }
 
 #consent_form {
-  position: absolute;
-  -webkit-transform: translateX(-50%);
-  transform: translateX(-50%);
-  top: 20%;
-  left: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   background-color: #292828;
 }
 
 #consent_form #form {
-  margin: 20px;
+  display: grid;
+  gap: 16px;
   padding: 20px;
   width: 100%;
   background-color: #090032;
@@ -33,9 +32,8 @@ html {
 
 #consent_form #form #intro_video {
   position: relative;
-  padding-bottom: 56.25%;
-  padding-top: 35px;
-  height: 0;
+  height: 400px;
+  margin-top: 90px;
   overflow: hidden;
 }
 
@@ -49,12 +47,10 @@ html {
 
 #consent_form #form h3#consent_title {
   margin: 0 auto;
-  padding: 20px;
   text-align: center;
 }
 
 #consent_form #form p {
-  padding: 20px 0;
   font-size: 1.75rem;
   line-height: 1.5;
 }
@@ -78,8 +74,10 @@ html {
 
 #consent_form #form input[type=submit] {
   position: relative;
-  left: 45%;
   padding: 10px;
+  width: max-content;
+  justify-self: anchor-center;
+  cursor: pointer;
 }
 
 #consent_form #form input[type=text]:focus, #consent_form #form input:focus[type=number], #consent_form #form input[type=submit]:focus {
@@ -97,9 +95,6 @@ html {
 }
 
 h2#countdown, #timer {
-  position: absolute;
-  left: 40%;
-  top: 5%;
   color: #c8c8c8;
   font-size: 2.75rem;
 }
@@ -110,42 +105,33 @@ h2#countdown, #timer {
 
 #nav {
   position: fixed;
-  right: 0;
-  top: 50%;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.75);
+  display: flex;
+  gap: 8px;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 10;
 }
 
-#nav .arrow {
-  position: relative;
-  padding: 2rem;
-  background-color: #090032;
-  color: #c8c8c8;
-  border: none;
-  -webkit-transition: 0.5s;
-  transition: 0.5s;
-}
-
-#nav .arrow:hover {
-  /*   border: solid white; */
-  background-color: #6464c8;
-}
-
-#nav #btn {
+#nav ul {
   position: relative;
 }
 
-#nav #btn .vis {
+#nav ul .vis {
   display: block;
   padding: 2.5rem;
   font-size: 2rem;
-  background-color: black;
   color: #c8c8c8;
   border: none;
+  cursor: pointer;
 }
 
-#nav #btn .vis:hover {
-  -webkit-transition: 0.5s;
+#nav ul .vis:hover {
   transition: 0.5s;
-  background-color: #6464c8;
+  background-color: rgb(100, 100, 200);
 }
 
 .warning {
@@ -161,63 +147,69 @@ h2#countdown, #timer {
 }
 
 #stats {
-  position: absolute;
+  position: fixed;
   padding: 20px;
   top: 0;
   left: 0;
   min-height: 100vh;
-  min-width: 10%;
+  width: 200px;
   background-color: black;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
 #stats h3 {
   position: relative;
-  margin-top: 20rem;
+  margin-top: 90px;
   font-size: 2rem;
   color: #c8c8c8;
 }
 
 #stats #gender, #stats #age, #stats #aggressiveness, #stats #suspiciousness, #stats #passiveness {
   position: relative;
-  padding: 10px;
   font-size: 1.75rem;
+  color: #8A8EFF;
 }
 
 .wrapper {
-  background-color: #090032;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 100px;
 }
 
 .wrapper h2 {
   visibility: visible;
-  position: absolute;
   margin: 0 auto;
-  top: 50%;
   color: #c8c8c8;
   font-weight: 2rem;
   font-size: 5rem;
 }
 
 .preview {
-  position: absolute;
+  position: relative;
   bottom: 0;
-  padding: 3rem;
+  margin-top: 8px;
+  padding: 8px;
   font-size: 2rem;
-  background-color: black;
+  background-color: #090032;
   color: #c8c8c8;
   border-radius: 2px;
+  cursor: pointer;
 }
 
 #risk {
   bottom: 0;
   text-align: center;
-  font-size: 6rem;
+  font-size: 1.75rem;
+  background-color: #8A8EFF;
+  color: black;
+  border-radius: 4px;
 }
 
 img#logo {
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 20%;
+  width: 200px;
 }
 
 .one_img {
@@ -227,37 +219,6 @@ img#logo {
   width: 200px;
 }
 
-@media only screen and (max-width: 600px) {
-  html {
-    font-size: 1vw;
-  }
-}
 
-/* Small devices (portrait tablets and large phones, 600px and up) */
-@media only screen and (min-width: 600px) {
-  html {
-    font-size: 0.9vw;
-  }
-}
 
-/* Medium devices (landscape tablets, 768px and up) */
-@media only screen and (min-width: 768px) {
-  html {
-    font-size: 0.8vw;
-  }
-}
-
-/* Large devices (laptops/desktops, 992px and up) */
-@media only screen and (min-width: 992px) {
-  html {
-    font-size: 0.75vw;
-  }
-}
-
-/* Extra large devices (large laptops and desktops, 1200px and up) */
-@media only screen and (min-width: 1200px) {
-  html {
-    font-size: 0.65vw;
-  }
-}
 /*# sourceMappingURL=styles.css.map */

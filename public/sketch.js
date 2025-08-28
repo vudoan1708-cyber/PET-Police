@@ -13,7 +13,8 @@ const video = document.getElementById('video'),
 
       hidden_canvas = document.getElementById('canvas'),
       warningBox = document.createElement("div"),
-      visualisation_btn = document.querySelector(".preview");
+      visualisation_btn = document.querySelector(".preview"),
+      submit_btn = document.querySelector('input[type="submit"]#submit'),
       arrowBtn = document.querySelector('.arrow');
 
 // pre-modify some HTML elements for the intro section
@@ -95,13 +96,16 @@ Promise.all([
 // if clicked, start the video and do the rest of the code
 function check() {
     if (!isSubmitted) {
-        setTimeout(check, 100);
+        const id = setTimeout(() => {
+            check();
+            clearTimeout(id);
+        }, 100);
     } else {
         consent_form.style.display = 'none';
         countdown.style.display = 'block';
         // nav.style.opacity = 1;
-        content_wrapper.style.display = 'block';
-        stats.style.display = 'block';
+        content_wrapper.style.display = 'flex';
+        stats.style.display = 'flex';
         risk.style.display = 'block';
         webcam_loading.style.visibility = 'visible';
         hidden_canvas.style.visibility = 'visible';
@@ -154,24 +158,20 @@ function validationForm() {
     if (!agreementCheck.checked) {
         messages.push('Please check this box to proceed!');
         // style the warning message
-        showMessage.style.position = 'absolute';
-        showMessage.style.left = '15%';
-        showMessage.style.bottom = '10%';
-        showMessage.style.display = 'inline-block';
+        showMessage.style.display = 'block';
         showMessage.style.color = 'red';
-        showMessage.style.border = 'solid';
         showMessage.style.fontSize = '1.25rem';
         showMessage.innerHTML = messages;
-        agreementCheck.parentNode.insertBefore(showMessage, agreementCheck.nextSibling); // add a warning message above the check box
+        agreementCheckLabel.parentNode.insertBefore(showMessage, agreementCheckLabel.nextSibling); // add a warning message above the check box
     }
     
 
     if (messages.length > 0) {
         // e.preventDefault();
         // clear the warning message after 2 secs
-        setTimeout(() => {
-            showMessage.parentNode.removeChild(showMessage);
-        }, 2000);
+        // setTimeout(() => {
+        //     showMessage.parentNode.removeChild(showMessage);
+        // }, 2000);
         return false;
     } else {
         // console.log(fname.value);
@@ -273,7 +273,7 @@ video.addEventListener('play', () => {
                 // after all the fluctuation of the risk factors and risk level calculation, and detections
                 // don't do anything else until it captures a photo
                 return new Promise(() => {
-                    setTimeout(() => { 
+                    const timeoutId = setTimeout(() => { 
                         // get the exact size of the video element
                         if (captured) {
                             captured = false;
@@ -297,6 +297,7 @@ video.addEventListener('play', () => {
                             
                             // triggers the async function after 10 secs since opening the webpage
                             storeImg();
+                            clearTimeout(timeoutId);
                         }
                     }, 10000)// wait for 10 secs to invoke the above function
                 }); // end of promise
@@ -324,19 +325,17 @@ function displayWarning(msg) {
     // clear the warning message after 2 secs
     warningTimeout = setTimeout(() => {
         warningBox.parentNode.removeChild(warningBox);
-        warningTimeout = -1;
+        clearTimeout(warningTimeout);
     }, 2000);
 }
 
 // visualise images from the database
 function displayImg() {
     if (imgData.length == 0) { // if there is no image in the database
-        console.log("No Image From Database"); 
         // display a warning box message
         displayWarning("No Image From The Database."
                         + "\n" + "Capture Your Face To Store An Image");
     } else {
-        console.log("WILL LINK TO ANOTHER PAGE");
         location.href = "profiles/profiles.html"; // link to the profiles file
     }
 }
@@ -366,7 +365,6 @@ async function previewImg() {
 async function getImg() {
     const old_data = await fetch('/face-api/');
     imgData = await old_data.json();
-    console.log(imgData);
     return imgData;
 }
 
@@ -400,85 +398,39 @@ async function storeImg() {
         body: JSON.stringify(data)
     };
     const store_response = await fetch('/face-api/', options);
-    const json = await store_response.json();
-    console.log(json);
+    await store_response.json();
     visualisation_btn.style.visibility = "visible";
-}
-
-function showBtns(b) {
-    const button = document.getElementById(b);
-    if (button.style.display === 'none') {
-        button.style.display = 'block';
-        arrowBtn.textContent = '>>>';
-        // button.style.transition = "display 0.5s";
-    } else {
-      button.style.display = 'none';
-      arrowBtn.textContent = '<<<';
-    }
 }
 
 function drawAggr() {
     const newDiv = document.getElementById("aggressiveness");
-    newDiv.style.color = "#8A8EFF";
-    newDiv.style.position = "absolute";
-    newDiv.style.top = "50%";
-    newDiv.style.left = "0";
     newDiv.innerHTML = "Aggressiveness: " + (aggressiveness) + "%";
 }
 
 function drawSusp() {
     const newDiv = document.getElementById("suspiciousness");
-    newDiv.style.color = "#8A8EFF";
-    newDiv.style.position = "absolute";
-    newDiv.style.top = "60%";
-    newDiv.style.left = "0";
     newDiv.innerHTML = "Suspiciousness: " + (suspiciousness) + "%";
 }
 
 function drawPass() {
     const newDiv = document.getElementById("passiveness");
-    newDiv.style.color = "#8A8EFF";
-    newDiv.style.position = "absolute";
-    newDiv.style.top = "70%";
-    newDiv.style.left = "0";
     newDiv.innerHTML = "Passiveness: " + (passiveness) + "%";
 }
 
 function drawAge() {
     const newDiv = document.getElementById("age");
-    newDiv.style.color = "#8A8EFF";
-    newDiv.style.position = "absolute";
-    // newDiv.style.transform = "translate(-50, -50)";
-    newDiv.style.top = "40%";
-    newDiv.style.left = "0";
-    // newDiv.style.text-align = "center";
     newDiv.innerHTML = "Age: " + (age);
 }
 
 function drawGender() {
     const newDiv = document.getElementById("gender");
-    newDiv.style.color = "#8A8EFF";
-    newDiv.style.position = "absolute";
-    // newDiv.style.transform = "translate(-50, -50)";
-    newDiv.style.top = "35%";
-    newDiv.style.left = "0";
-    // newDiv.style.text-align = "CENTER";
     const abbreviation = gender.charAt(0).toUpperCase(); // get the first letter and capitalise it
-    // console.log(abbreviation);
     newDiv.innerHTML = "Gender: " + abbreviation;
-    // document.getElementById("video").appendChild(newDiv);
-    // document.body.appendChild(newDiv);
-    // btnShow = true;
 }
 
 function riskDisplay() {
     const newDiv = document.getElementById("risk");
-    newDiv.style.color = "#8A8EFF";
-    newDiv.style.position = "absolute";
-    newDiv.style.bottom = "0";
-    newDiv.style.left = "10%";
     if (riskLevel > 0 && riskLevel < 100) newDiv.innerHTML = (riskLevel) + "% Risk";
-
 }
 
 function interpolatedAgePredictions(age) {
