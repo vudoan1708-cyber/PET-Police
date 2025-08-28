@@ -220,16 +220,16 @@ video.addEventListener('play', () => {
             faceapi.draw.drawDetections(canvas, resizedDetections); // detects faces
             faceapi.draw.drawFaceExpressions(canvas, resizedDetections); // detect expressions
             // console.log(resizedDetections[0]);
-            if (resizedDetections) {
-                age = Math.round(resizedDetections[0].age);
-                gender = resizedDetections[0].gender;
+            if (resizedDetections?.length > 0) {
+                age = Math.round(resizedDetections[0]?.age);
+                gender = resizedDetections[0]?.gender;
                 // aggressiveness
-                const angry = resizedDetections[0].expressions.angry;
+                const angry = resizedDetections[0]?.expressions.angry;
                 // suspiciousness
-                const fearful = resizedDetections[0].expressions.fearful;
-                const sad = resizedDetections[0].expressions.sad;
+                const fearful = resizedDetections[0]?.expressions.fearful;
+                const sad = resizedDetections[0]?.expressions.sad;
                 // passiveness
-                const neutral = resizedDetections[0].expressions.neutral;
+                const neutral = resizedDetections[0]?.expressions.neutral;
 
                 // const interpolatedAge = interpolatedAgePredictions(age);
                 // console.log(interpolatedAge);
