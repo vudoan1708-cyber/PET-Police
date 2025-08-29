@@ -4,6 +4,7 @@
   "description": "Creating with Data project (Face-api.js)",
   "main": "server.js",
   "dependencies": {
+    "@tensorflow/tfjs-node": "^4.22.0",
     "dotenv": "^17.2.1",
     "express": "^4.17.1",
     "monk": "^7.3.4",
