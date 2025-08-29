@@ -4,8 +4,9 @@
   "description": "Creating with Data project (Face-api.js)",
   "main": "server.js",
   "dependencies": {
+    "dotenv": "^17.2.1",
     "express": "^4.17.1",
-    "express-validator": "^6.4.0",
+    "monk": "^7.3.4",
     "nedb": "^1.8.0"
   },
   "devDependencies": {
