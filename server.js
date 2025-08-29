@@ -1,8 +1,10 @@
 require('dotenv').config();
 
+const path = require('path');
 const express = require("express"); // load express
 const createConnection = require('./data/connection');
 
+const root = path.join(__dirname, './public');
 const port = process.env.PORT || 5000;
 const app = express(); // setup express
 const http = require("http");
@@ -67,4 +69,4 @@ app.get('/face-api/', async (request, response) => {
 //     } else response.json(data);
 //   })
 // });
-app.use(express.static("public"));
+app.use(express.static(root));
