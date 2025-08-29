@@ -18,7 +18,7 @@ app.use(express.json({ limit: "100mb" }))
 const detectionResults_db = createConnection('detectionResults');
 
 // save images to server
-app.post('/face-api/', (request, response) => {
+app.post('/face-api/', async (request, response) => {
     const data = request.body;
     // console.log(data.totalImg);
     const timeStamp = Date.now();
@@ -30,7 +30,7 @@ app.post('/face-api/', (request, response) => {
     // console.log(getDate);
     data.timestamp = getDate;
   
-    detectionResults_db.insert(data);
+    await detectionResults_db.insert(data);
     response.json(data);
   });
 
